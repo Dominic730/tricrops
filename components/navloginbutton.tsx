@@ -26,11 +26,11 @@ export default function NavLoginButton() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    setIsMounted(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
       return () => unsubscribe();
     });
+    setIsMounted(true);
   }, []);
 
   if (!isMounted) {

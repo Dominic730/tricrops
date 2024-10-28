@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
@@ -15,13 +15,15 @@ export default function Login() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  onAuthStateChanged(auth, (user: null | User) => {
-    if (user) {
-      router.push("/");
-    } else {
-      setLoading(false);
-    }
-  });
+  useEffect(() => {
+    onAuthStateChanged(auth, (user: null | User) => {
+      if (user) {
+        router.push("/");
+      } else {
+        setLoading(false);
+      }
+    });
+  }, [router]);
 
   if (loading) {
     return (
@@ -63,9 +65,7 @@ export default function Login() {
               <Button
                 className="w-full flex gap-3 py-2 h-fit bg-green-500 hover:bg-green-400"
                 onClick={async () => {
-                  setLoading(true);
                   await signInWithGoogle();
-                  setLoading(false);
                 }}
               >
                 {loading ? (
