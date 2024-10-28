@@ -6,8 +6,30 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { auth } from "@/lib/firebase/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { useRouter } from "next/navigation";
+import { signInWithGoogle } from "@/lib/firebase/auth";
+
 export default function Login() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  onAuthStateChanged(auth, (user: null | User) => {
+    if (user) {
+      router.push("/");
+    } else {
+      setLoading(false);
+    }
+  });
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader className="animate-spin h-16 w-16 text-green-500" />{" "}
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center h-screen px-10 py-5 md:px-36 items-center">
@@ -40,9 +62,10 @@ export default function Login() {
               </p>
               <Button
                 className="w-full flex gap-3 py-2 h-fit bg-green-500 hover:bg-green-400"
-                onClick={() => {
+                onClick={async () => {
                   setLoading(true);
-                  alert("Loggin in");
+                  await signInWithGoogle();
+                  setLoading(false);
                 }}
               >
                 {loading ? (

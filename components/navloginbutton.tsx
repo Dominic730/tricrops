@@ -17,19 +17,25 @@ import {
   UserPen,
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase/firebase";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { signOut } from "@/lib/firebase/auth";
 
 export default function NavLoginButton() {
   const [isMounted, setIsMounted] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      return () => unsubscribe();
+    });
   }, []);
 
   if (!isMounted) {
     return <Loader className="animate-spin" />;
   }
-
-  const session = null;
 
   return (
     <div>
@@ -37,16 +43,14 @@ export default function NavLoginButton() {
         <NavigationMenuList>
           <NavigationMenuItem>
             <Link
-              href={session ? "/profile" : "/login"}
+              href={user ? "/profile" : "/login"}
               legacyBehavior
               passHref
             >
               {/* <NavigationMenuLink className={navigationMenuTriggerStyle()}> */}
               <NavigationMenuTrigger className="mb-0">
                 <CircleUserRound />
-                <p className="text-[16px] pl-1">
-                  {session ? "Account" : "Login"}
-                </p>
+                <p className="text-[16px] pl-1">{user ? "Account" : "Login"}</p>
               </NavigationMenuTrigger>
               {/* </NavigationMenuLink> */}
             </Link>
@@ -58,7 +62,7 @@ export default function NavLoginButton() {
                       className="text-sm text-center "
                       href="/signup"
                     >
-                      {session ? null : (
+                      {user ? null : (
                         <div className="flex gap-2 items-center">
                           <LogIn />
                           <p>Sign Up</p>
@@ -67,7 +71,7 @@ export default function NavLoginButton() {
                     </Link>
                   </NavigationMenuLink>
                 </li>
-                {session ? null : (
+                {user ? null : (
                   <div className={"w-full border border-gray-600 my-2"} />
                 )}
                 <li className="w-full">
@@ -93,14 +97,14 @@ export default function NavLoginButton() {
                     </Link>
                   </NavigationMenuLink>
                 </li>
-                {session ? (
+                {user ? (
                   <div>
                     <div className="w-full border border-gray-600 my-2" />
                     <li className="w-full">
                       <NavigationMenuLink asChild>
                         <button
                           className="text-sm text-center flex gap-2 items-center"
-                          onClick={() => alert("Signed out")}
+                          onClick={() => signOut()}
                         >
                           <LogOut />
                           Log Out
