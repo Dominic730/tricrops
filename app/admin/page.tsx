@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import addProducts from "@/lib/db/addproducts";
 import { auth } from "@/lib/firebase/firebase";
+import { UploadButton } from "@/utils/uploadthing";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -37,6 +38,7 @@ export default function Admin() {
 
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   if (loading) {
     return (
@@ -64,6 +66,7 @@ export default function Admin() {
               await addProducts({
                 productname: productName,
                 productprice: Number(productPrice),
+                productimage: imageUrl,
               });
             }}
             className="space-y-6 py-5"
@@ -111,6 +114,18 @@ export default function Admin() {
               >
                 Product Image
               </Label>
+              <UploadButton
+                endpoint="imageUploader"
+                onClientUploadComplete={(res) => {
+                  // Do something with the response
+                  setImageUrl(`https://utfs.io/f/${res[0].key}`);
+                  alert("Upload Completed");
+                }}
+                onUploadError={(error: Error) => {
+                  // Do something with the error.
+                  alert(`ERROR! ${error.message}`);
+                }}
+              />
             </div>
 
             <Button
