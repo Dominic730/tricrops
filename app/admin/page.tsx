@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import addProducts from "@/lib/db/addproducts";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { Loader } from "lucide-react";
@@ -36,8 +37,6 @@ export default function Admin() {
     }
   }
 
-  function handleSubmit() {}
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -55,7 +54,13 @@ export default function Admin() {
 
         <CardContent>
           <form
-            onSubmit={handleSubmit}
+            onSubmit={async (e) => {
+              e.preventDefault();
+              await addProducts({
+                productname: productName,
+                productprice: Number(productPrice),
+              });
+            }}
             className="space-y-6 py-5"
           >
             <div>
