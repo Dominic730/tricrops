@@ -12,30 +12,31 @@ import addProducts from "@/lib/db/addproducts";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { Loader } from "lucide-react";
-import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Admin() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
-  onAuthStateChanged(auth, (user: null | User) => {
-    if (user) {
-      setUser(user);
+
+  useEffect(() => {
+    const authenticatedEmails = [
+      "adithyakb93@gmail.com",
+      "abrahul02@gmail.com",
+    ];
+    onAuthStateChanged(auth, (user: null | User) => {
+      if (user && user.email && authenticatedEmails.includes(user?.email)) {
+        setUser(user);
+      } else {
+        router.push("/");
+      }
       setLoading(false);
-    } else {
-      router.push("/");
-    }
-  });
+    });
+  }, [router]);
+
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
-
-  const authenticatedEmails = ["adithyakb93@gmail.com", "abrahul02@gmail.com"];
-  if (user?.email) {
-    if (!authenticatedEmails.includes(user?.email)) {
-      redirect("/");
-    }
-  }
 
   if (loading) {
     return (
@@ -43,6 +44,10 @@ export default function Admin() {
         <Loader className="animate-spin h-16 w-16 text-green-500" />{" "}
       </div>
     );
+  }
+
+  if (!user) {
+    return <div>Not Authenticated</div>;
   }
 
   return (
