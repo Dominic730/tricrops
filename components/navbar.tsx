@@ -5,6 +5,8 @@ import NavLoginButton from "./navloginbutton";
 import { MoreVertical } from "lucide-react";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import Logo from "@/public/Tricrops.png";
 
 export function Navbar() {
   return (
@@ -14,7 +16,7 @@ export function Navbar() {
           href="/"
           className="text-lg font-semibold"
         >
-          LOGO
+          <Image src={Logo} alt="Tricrops Logo" className="h-fit object-cover rounded-xl" height={50}/>
         </Link>
       </div>
       <div className="flex-1 hidden md:flex">

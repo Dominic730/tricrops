@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <Navbar />
         {children}
-        <Script
+        <Script 
           src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"
           strategy="beforeInteractive"
         />
