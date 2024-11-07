@@ -27,11 +27,11 @@ export default function Home() {
     fetchProducts();
   }, []);
   return (
-    <div className="p-20">
+    <div className="grid grid-cols-1 md:grid-cols-4 p-20 border border-yellow-300">
       {products.map((product) => (
         <div
           key={product.id}
-          className="py-10"
+          className="py-5"
         >
           <ProductCard
             productName={product.productname}

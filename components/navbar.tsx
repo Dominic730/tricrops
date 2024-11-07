@@ -6,28 +6,28 @@ import { MoreVertical, ShoppingBag } from "lucide-react";
 import { Shovel } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import Logo from "@/public/Tricrops.png";
+// import Logo from "@/public/Tricrops.png";
 import { usePathname } from "next/navigation";
 
 export function Navbar() {
   const pathname = usePathname();
-
   return (
-    <nav className="flex py-2 md:py-4 px-5 md:px-20 absolute w-screen gap-20 justify-between bg-blue-300">
+    <nav className="flex px-5 md:px-20 absolute w-screen gap-20 justify-between bg-blue-300">
       <div className="flex items-center gap-5">
         <Link
           href="/"
           className="flex text-lg font-semibold w-16 items-center justify-center"
         >
           <Image
-            src={Logo}
+            src="/tripcrops.svg"
             alt="Tricrops Logo"
             className="h-fit object-cover rounded-xl"
-            height={50}
+            width={200}
+            height={200}
           />
         </Link>
       </div>
-      <div className="flex-1 hidden md:flex">
+      <div className="hidden md:flex w-[500px] ml-56 items-center justify-center">
         <div className="w-full">
           <SearchBar />
         </div>
