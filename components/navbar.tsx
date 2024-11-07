@@ -3,22 +3,26 @@
 import SearchBar from "./searchbar";
 import NavLoginButton from "./navloginbutton";
 import { MoreVertical, ShoppingBag } from "lucide-react";
+import { Shovel } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/public/Tricrops.png";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
+  const pathname = usePathname();
+
   return (
     <nav className="flex py-2 md:py-4 px-5 md:px-20 absolute w-screen gap-20 justify-between bg-blue-300">
       <div className="flex items-center gap-5">
         <Link
           href="/"
-          className="flex p-1 text-lg ring-2 ring-blue-600 font-semibold rounded-full aspect-square w-10 items-center justify-center"
+          className="flex text-lg font-semibold w-16 items-center justify-center"
         >
           <Image
             src={Logo}
             alt="Tricrops Logo"
-            className="h-full object-cover rounded-xl w-full"
+            className="h-fit object-cover rounded-xl"
             height={50}
           />
         </Link>
@@ -29,15 +33,27 @@ export function Navbar() {
         </div>
       </div>
       <div className="flex md:gap-12">
-        <Link
-          href="/sell"
-          className="hidden md:block"
-        >
-          <div className="flex items-center gap-2">
-            <ShoppingBag />
-            <p className="whitespace-nowrap">Become a Seller</p>
-          </div>
-        </Link>
+        {pathname === "/" ? (
+          <Link
+            href="/sell"
+            className="hidden md:block"
+          >
+            <div className="flex items-center gap-2 h-full">
+              <ShoppingBag />
+              <p className="whitespace-nowrap">Become a Seller</p>
+            </div>
+          </Link>
+        ) : (
+          <Link
+            href="/buy"
+            className="hidden md:block"
+          >
+            <div className="flex items-center gap-2 h-full">
+              <Shovel />
+              <p className="whitespace-nowrap">Farming Essentials</p>
+            </div>
+          </Link>
+        )}
         <div className="flex items-center">
           <div>
             <NavLoginButton />
