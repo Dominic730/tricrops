@@ -48,13 +48,15 @@ export default function NavLoginButton() {
               passHref
             >
               {/* <NavigationMenuLink className={navigationMenuTriggerStyle()}> */}
-              <NavigationMenuTrigger className="mb-0">
+              <NavigationMenuTrigger className="mb-0 bg-blue-300 hover:bg-blue-200">
                 <CircleUserRound />
-                <p className="text-[16px] pl-1">{user ? "Account" : "Login"}</p>
+                <p className="text-[16px] pl-1 font-normal">
+                  {user ? "Account" : "Login"}
+                </p>
               </NavigationMenuTrigger>
               {/* </NavigationMenuLink> */}
             </Link>
-            <NavigationMenuContent>
+            <NavigationMenuContent className="hidden md:block">
               <ul className="w-[180px] px-5 py-3">
                 <li className="w-full ">
                   <NavigationMenuLink asChild>

@@ -34,8 +34,8 @@ export default function Login() {
   }
 
   return (
-    <div className="flex justify-center h-screen px-10 py-5 md:px-36 items-center">
-      <div className="flex w-full justify-center h-[500px] border-green-600 border-2 rounded-md">
+    <div className="flex justify-center h-screen px-5 py-5 md:px-36 items-center">
+      <div className="flex w-full justify-center h-[500px] border-green-600 md:border-2 rounded-md">
         <div className="hidden w-1/3 bg-green-500 h-full p-10 pr-5 md:flex flex-col gap-5">
           <p className="font-medium text-3xl">Login</p>
           <p className="text-lg">
@@ -44,10 +44,12 @@ export default function Login() {
         </div>
         <div className="w-full md:w-2/3 h-full text-center p-10 flex flex-col items-center justify-between">
           <div>
-            <p className="text-2xl">Sign in to continue</p>
+            <p className="text-2xl font-medium  md:text-2xl">
+              Sign in to continue
+            </p>
             <div>
               <p className="text-xs pt-8 pb-8 md:pb-3 text-left">
-                By continuing you are agreeing to SpiceHub&apos;s{" "}
+                By continuing you are agreeing to TripCrops&apos;s{" "}
                 <a
                   className="text-[#5d96f3]"
                   href="#"
@@ -88,7 +90,7 @@ export default function Login() {
               className="text-sm text-green-400 font-medium"
               href="/signup"
             >
-              New to SpiceHub? Create an account
+              New to TripCrops? Create an account
             </Link>
           </div>
         </div>
