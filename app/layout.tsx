@@ -30,20 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="fixed z-50 w-full h-20">
+        <div className="fixed z-50 w-full">
           <Navbar />
         </div>
-        <div className="pt-24">
+        <div>
           {children}
         </div>
-        <Script 
-          src="https://www.gstatic.com/firebasejs/11.0.1/firebase-app-compat.js"
-          strategy="beforeInteractive"
-        />
-        <Script
-          src="https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore-compat.js"
-          strategy="beforeInteractive"
-        />
       </body>
     </html>
   );

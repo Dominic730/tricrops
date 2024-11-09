@@ -1,118 +1,84 @@
 "use client";
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, UserPen } from "lucide-react";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 
 export default function NavLoginButton() {
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
-      return () => unsubscribe();
-    });
+    const unsubscribe = onAuthStateChanged(auth, setUser);
     setIsMounted(true);
+    return () => unsubscribe();
   }, []);
 
   if (!isMounted) {
     return <Loader className="animate-spin" />;
   }
 
+  const navigationItems = [
+    { href: "/profile", label: "My Profile", icon: <UserPen /> },
+    { href: "/orders", label: "My Orders", icon: <ShoppingCart /> },
+    { href: "/cart", label: "Cart", icon: <ShoppingCart /> },
+  ];
+
   return (
     <div>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <Link
-              href={user ? "/profile" : "/login"}
-              legacyBehavior
-              passHref
-            >
-              {/* <NavigationMenuLink className={navigationMenuTriggerStyle()}> */}
-              <NavigationMenuTrigger className="mb-0 bg-blue-300 hover:bg-blue-200">
-                <CircleUserRound />
-                <p className="text-[16px] pl-1 font-normal">
-                  {user ? "Account" : "Login"}
-                </p>
-              </NavigationMenuTrigger>
-              {/* </NavigationMenuLink> */}
-            </Link>
+            <NavigationMenuTrigger className="mb-0 bg-blue-300 hover:bg-blue-200 flex gap-2 items-center px-3 py-2 rounded-md transition">
+              {user ? <CircleUserRound />  : ""}
+              
+              <span className="text-sm font-medium">
+                {user ? "Account" : "Login"}
+              </span>
+            </NavigationMenuTrigger>
             <NavigationMenuContent className="hidden md:block">
-              <ul className="w-[180px] px-5 py-3">
-                <li className="w-full ">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      className="text-sm text-center "
-                      href="/signup"
-                    >
-                      {user ? null : (
-                        <div className="flex gap-2 items-center">
+              <ul className="min-w-[150px] px-4 py-3">
+                {!user ? (
+                  <>
+                    <li className="w-full">
+                      <NavigationMenuLink asChild>
+                        <Link className="text-sm flex gap-2 items-center" href="/login">
                           <LogIn />
-                          <p>Sign Up</p>
-                        </div>
-                      )}
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                {user ? null : (
-                  <div className={"w-full border border-gray-600 my-2"} />
-                )}
-                <li className="w-full">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      className="text-sm text-center flex gap-2 items-center"
-                      href="/signup"
-                    >
-                      <UserPen />
-                      My Profile
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                <div className="w-full border border-gray-600 my-2" />
-                <li className="w-full">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      className="text-sm text-center flex gap-2 items-center"
-                      href="/orders"
-                    >
-                      <ShoppingCart />
-                      My Orders
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                <div className="w-full border border-gray-600 my-2" />
-                <li className="w-full">
-                  <NavigationMenuLink asChild>
-                    <Link
-                      className="text-sm text-center flex gap-2 items-center"
-                      href="/cart"
-                    >
-                      <ShoppingCart />
-                      Cart
-                    </Link>
-                  </NavigationMenuLink>
-                </li>
-                {user ? (
-                  <div>
-                    <div className="w-full border border-gray-600 my-2" />
+                          <span>Login<br/>Sign Up</span>
+                        </Link>
+                      </NavigationMenuLink>
+                    </li>
+                  </>
+                ) : (
+                  <>
+                    {navigationItems.map((item) => (
+                      <li key={item.href} className="w-full">
+                        <NavigationMenuLink asChild>
+                          <Link className="text-sm flex gap-2 items-center" href={item.href}>
+                            {item.icon}
+                            <span>{item.label}</span>
+                          </Link>
+                        </NavigationMenuLink>
+                        <div className="my-2 border-t border-gray-300" />
+                      </li>
+                    ))}
                     <li className="w-full">
                       <NavigationMenuLink asChild>
                         <button
-                          className="text-sm text-center flex gap-2 items-center"
+                          className="text-sm flex gap-2 items-center w-full text-left"
                           onClick={() => signOut()}
                         >
                           <LogOut />
-                          Log Out
+                          <span>Log Out</span>
                         </button>
                       </NavigationMenuLink>
                     </li>
-                  </div>
-                ) : null}
+                  </>
+                )}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
