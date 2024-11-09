@@ -1,19 +1,20 @@
 "use client";
 
-import { ref, onValue, update, remove } from "firebase/database";
+import fetchCart from "@/actions/fetchCart";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { realtimeDB } from "@/lib/firebase/firebase";
+import { ref, update, remove } from "firebase/database";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Minus, Plus, Trash2 } from "lucide-react";
 
 interface CartItem {
     price: number;
     weight: number;
-};
+}
 
 interface CartDataSub {
     [productId: string]: CartItem;
-};
+}
 
 interface CartTableProps {
     userID: string;
@@ -21,37 +22,40 @@ interface CartTableProps {
 
 const CartTable: React.FC<CartTableProps> = ({ userID }) => {
     const [cartData, setCartData] = useState<CartDataSub | null>(null);
+    const [grandTotal, setGrandTotal] = useState<number>(0);
 
-    useEffect(() => {
-        const cartRef = ref(realtimeDB, `cart/${userID}`);
-        onValue(cartRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data) {
-                let cartData: CartDataSub = {};
-                for (const key in data) {
-                    cartData = data[key];
-                }
-                setCartData(cartData);
-            }
-        });
+    const fetchData = React.useCallback(async () => {
+        const data = await fetchCart(userID);
+        setCartData(data);
     }, [userID]);
 
-    const updateWeight = (productId: string, newWeight: number) => {
+    useEffect(() => {   
+        fetchData();
+    }, [fetchData]);
+
+    useEffect(() => {
+        if (cartData) {
+            const total = Object.values(cartData).reduce((sum, item) => sum + item.price * item.weight, 0);
+            setGrandTotal(total);
+        }
+    }, [cartData]);
+
+    const updateWeight = async (productId: string, newWeight: number) => {
         if (newWeight < 0) return; // Prevent negative weight
         const productRef = ref(realtimeDB, `cart/${userID}/${productId}`);
-        update(productRef, { weight: newWeight });
+        await update(productRef, { weight: newWeight });
+        await fetchData();
     };
 
-    const deleteProduct = (productId: string) => {
+    const deleteProduct = async (productId: string) => {
         const productRef = ref(realtimeDB, `cart/${userID}/${productId}`);
-        remove(productRef)
-            .then(() => {
-                // Optionally show a confirmation or handle UI updates
-                console.log(`${productId} removed from cart`);
-            })
-            .catch((error) => {
-                console.error("Error deleting product:", error);
-            });
+        try {
+            await remove(productRef);
+            console.log(`${productId} removed from cart`);
+        } catch (error) {
+            console.error("Error deleting product:", error);
+        }
+        await fetchData();
     };
 
     return (
@@ -88,7 +92,7 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
                                 </TableCell>
                                 <TableCell className="p-2 text-center font-semibold">{product.price * product.weight}</TableCell>
                             </TableRow>
-                        )) 
+                        ))
                     ) : (
                         <TableRow>
                             <TableCell colSpan={5} className="text-center p-4 text-gray-500">
@@ -96,6 +100,10 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
                             </TableCell>
                         </TableRow>
                     )}
+                    <TableRow>
+                        <TableCell colSpan={4} className="text-right text-xl p-4 font-semibold">Grand Total:</TableCell>
+                        <TableCell className="p-4 text-center text-2xl font-semibold">₹ {grandTotal}</TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </div>

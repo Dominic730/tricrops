@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
@@ -9,6 +10,7 @@ import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, UserPen } from "l
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 
 export default function NavLoginButton() {
+  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -27,6 +29,11 @@ export default function NavLoginButton() {
     { href: "/orders", label: "My Orders", icon: <ShoppingCart /> },
     { href: "/cart", label: "Cart", icon: <ShoppingCart /> },
   ];
+
+  const handleLogOut = async () => {
+    await signOut();
+    router.push("/");
+  };
 
   return (
     <div>
@@ -68,10 +75,7 @@ export default function NavLoginButton() {
                     ))}
                     <li className="w-full">
                       <NavigationMenuLink asChild>
-                        <button
-                          className="text-sm flex gap-2 items-center w-full text-left"
-                          onClick={() => signOut()}
-                        >
+                        <button className="text-sm flex gap-2 items-center w-full text-left" onClick={handleLogOut} >
                           <LogOut />
                           <span>Log Out</span>
                         </button>
