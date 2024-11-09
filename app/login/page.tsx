@@ -16,7 +16,7 @@ export default function Login() {
   const router = useRouter();
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user: null | User) => {
+    onAuthStateChanged(auth, async (user: null | User) => {
       if (user) {
         router.push("/");
       } else {

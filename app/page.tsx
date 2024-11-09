@@ -23,19 +23,20 @@ export default function Home() {
       }));
       setProducts(productsArray);
     };
-
     fetchProducts();
   }, []);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 p-20 border border-yellow-300">
+    <div className="grid grid-cols-1 md:grid-cols-4 p-20">
       {products.map((product) => (
         <div
           key={product.id}
           className="py-5"
         >
           <ProductCard
+            id={product.id}
             productName={product.productname}
             productPrice={product.productprice}
+            productImage={product.productimage}
           />
         </div>
       ))}

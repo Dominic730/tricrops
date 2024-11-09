@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import addProducts from "@/lib/db/addproducts";
+import addProducts from "@/actions/addproducts";
 import { auth } from "@/lib/firebase/firebase";
 import { UploadButton } from "@/utils/uploadthing";
 import { onAuthStateChanged, User } from "firebase/auth";
