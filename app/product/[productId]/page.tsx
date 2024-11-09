@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import addCart from "@/actions/addCart";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase/firebase";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ export default function Product() {
   const [totalCost, setTotalCost] = useState(0);
   const [user, setUser] = useState<User | null>(null);
   const [product, setProduct] = useState<Product>();
+  const router = useRouter();
 
   const productid = useParams<{ productId: string }>();
 
@@ -38,7 +39,7 @@ export default function Product() {
       }
     };
     getProduct();
-  }, [productid]);
+  }, [productid, router]);
 
   if (!product) {
     return null;
@@ -70,10 +71,13 @@ export default function Product() {
       console.log(userId);
 
       try {
-        if (userId !== null) {
+        if (!user || user !== null || user !== undefined) {
           addCart({ productName, price, weight, userId });
+          alert("Product added to cart");
+        } else {
+          alert("Please login to add product to cart");
+          router.push("/login");
         }
-        alert("Product added to cart");
       } catch (e) {
         console.log(e);
         alert("Failed to add product to cart");
@@ -84,7 +88,7 @@ export default function Product() {
   }
   return (
     <div className="container mx-auto px-4 flex justify-center items-center pt-28 pb-5">
-      <div className="flex flex-col lg:flex-row">
+      <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl">
         <div className="flex justify-center items-center">
           <div className="w-[300px] aspect-square flex items-center">
             <Image

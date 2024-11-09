@@ -17,11 +17,9 @@ export default async function addToCart({ productName, price, weight, userId }: 
     if (snapshot.exists()) {
         // Product exists, so we update the price and weight
         const existingData = snapshot.val();
-        const updatedPrice = existingData.price + price;
         const updatedWeight = existingData.weight + weight;
 
         await update(cartRef, {
-            price: updatedPrice,
             weight: updatedWeight,
         });
     } else {

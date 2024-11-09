@@ -8,7 +8,7 @@ interface Product {
   productimage: string;
 }
 
-export default async function fetchProduct(productId: string) {
+export default async function fetchProduct(productId: string): Promise<Product | null> {
   try {
     const productRef = doc(db, "products", productId); // Assuming "products" is your collection name
     const productSnapshot = await getDoc(productRef);
@@ -18,7 +18,7 @@ export default async function fetchProduct(productId: string) {
       return {
         id: productSnapshot.id,
         ...(productData as Omit<Product, "id">),
-      };
+      } as Product;
     } else {
       console.log("No such product found!");
       return null;

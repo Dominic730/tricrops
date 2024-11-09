@@ -18,7 +18,7 @@ export default function ProductCard({
   const price = productPrice;
 
   return (
-    <div className="w-full h-full border-2 border-gray-200 shadow-sm rounded-md">
+    <div className="w-full h-full border-2 border-gray-200 shadow-sm rounded-md bg-white">
       <Link href={`/product/${id}`} className="h-full">
         <div className="w-full flex justify-center">
           <Image

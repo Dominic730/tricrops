@@ -47,7 +47,7 @@ export default function NavLoginButton() {
                 {user ? "Account" : "Login"}
               </span>
             </NavigationMenuTrigger>
-            <NavigationMenuContent className="hidden md:block">
+            <NavigationMenuContent className="">
               <ul className="min-w-[150px] px-4 py-3">
                 {!user ? (
                   <>
