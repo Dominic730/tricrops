@@ -1,5 +1,5 @@
 "use server";
-import { addDoc, collection, doc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { db } from "../lib/firebase/firebase";
 
 interface AddToCartProps {
@@ -21,8 +21,8 @@ export default async function addToCart({
 
   // Reference to the user's cart subcollection
   if (userId) {
-    const cartRef = collection(db, "users", userId, "cart");
-    await addDoc(cartRef, {
+    const cartRef = doc(db, "users", userId, "cart", productId);
+    await setDoc(cartRef, {
       productRef,
       weight,
       totalPrice,
