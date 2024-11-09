@@ -26,20 +26,14 @@ export default function Home() {
     fetchProducts();
   }, []);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 p-20">
-      {products.map((product) => (
-        <div
-          key={product.id}
-          className="py-5"
-        >
-          <ProductCard
-            id={product.id}
-            productName={product.productname}
-            productPrice={product.productprice}
-            productImage={product.productimage}
-          />
-        </div>
-      ))}
+    <div className="container mx-auto px-4 pt-28 pb-5">
+      <div className="flex flex-wrap justify-center gap-5">
+        {products.map((product) => ( 
+          <div key={product.id}>
+            <ProductCard id={product.id} productName={product.productname} productPrice={product.productprice} productImage={product.productimage} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

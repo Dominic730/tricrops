@@ -1,100 +1,85 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Loader } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-
-import { auth } from "@/lib/firebase/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { useRouter } from "next/navigation";
-import { signInWithGoogle } from "@/lib/firebase/auth";
+import Link from "next/link"
+import Image from "next/image"
+import { Loader } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { auth } from "@/lib/firebase/firebase"
+import { Button } from "@/components/ui/button"
+import { signInWithGoogle } from "@/lib/firebase/auth"
+import { onAuthStateChanged, User } from "firebase/auth"
 
 export default function Login() {
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const [loading, setLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user: null | User) => {
       if (user) {
-        router.push("/");
+        router.push("/")
       } else {
-        setLoading(false);
+        setLoading(false)
       }
-    });
-  }, [router]);
+    })
+  }, [router])
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="animate-spin h-16 w-16 text-green-500" />{" "}
+      <div className="flex items-center justify-center h-screen bg-gradient-to-r from-green-400 to-blue-500">
+        <Loader className="animate-spin h-16 w-16 text-white" />
       </div>
-    );
+    )
   }
 
   return (
-    <div className="flex justify-center h-screen px-5 py-5 md:px-36 items-center">
-      <div className="flex w-full justify-center h-[500px] border-green-600 md:border-2 rounded-md">
-        <div className="hidden w-1/3 bg-green-500 h-full p-10 pr-5 md:flex flex-col gap-5">
-          <p className="font-medium text-3xl">Login</p>
-          <p className="text-lg">
-            Get access to your Orders, Wishlist and Recommendations
-          </p>
-        </div>
-        <div className="w-full md:w-2/3 h-full text-center p-10 flex flex-col items-center justify-between">
-          <div>
-            <p className="text-2xl font-medium  md:text-2xl">
-              Sign in to continue
+    <div className="min-h-screen bg-gradient-to-r from-green-300 to-blue-600 flex items-center justify-center p-5">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden">
+        <div className="md:flex">
+          <div className="hidden md:block w-1/2 bg-green-500 p-10 text-white">
+            <h2 className="text-3xl font-bold mb-6">Welcome Back!</h2>
+            <p className="text-lg mb-8">
+              Get access to your Orders, Wishlist and Recommendations
             </p>
-            <div>
-              <p className="text-xs pt-8 pb-8 md:pb-3 text-left">
-                By continuing you are agreeing to TripCrops&apos;s{" "}
-                <a
-                  className="text-[#5d96f3]"
-                  href="#"
-                >
-                  Terms of Use
-                </a>{" "}
-                and <br className="hidden md:block" />{" "}
-                <a
-                  className="text-[#5d96f3]"
-                  href=""
-                >
-                  Privacy Policy
-                </a>
-              </p>
-              <Button
-                className="w-full flex gap-3 py-2 h-fit bg-green-500 hover:bg-green-400"
-                onClick={async () => {
-                  await signInWithGoogle();
-                }}
-              >
-                {loading ? (
-                  <Loader className="animate-spin" />
-                ) : (
-                  <Image
-                    src="/google.svg"
-                    alt="Google Logo"
-                    width={100}
-                    height={100}
-                    className="w-8"
-                  />
-                )}
-                <p>Sign in with Google</p>
-              </Button>
-            </div>
           </div>
-          <div>
-            <Link
-              className="text-sm text-green-400 font-medium"
-              href="/signup"
+          <div className="w-full md:w-1/2 md:h-[500px] p-8">
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">
+              Sign in to continue
+            </h2>
+            <p className="text-sm text-gray-600 mb-8">
+              By continuing you are agreeing to TripCrops&apos;s{" "}
+              <Link href="#" className="text-blue-500 hover:underline">
+                Terms of Use
+              </Link>{" "}
+              and{" "}
+              <Link href="#" className="text-blue-500 hover:underline">
+                Privacy Policy
+              </Link>
+            </p>
+            <Button
+              className="w-full py-3 bg-green-500 hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-3 rounded-lg text-white font-semibold text-lg"
+              onClick={async () => {
+                await signInWithGoogle()
+              }}
             >
-              New to TripCrops? Create an account
-            </Link>
+              {loading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                <Image src="/google.svg" alt="Google Logo" width={24} height={24} />
+              )}
+              <span>Sign in with Google</span>
+            </Button>
+            <div className="mt-8 text-center">
+              <Link
+                className="text-sm text-green-600 hover:text-green-700 font-medium"
+                href="/signup"
+              >
+                New to TripCrops? Create an account
+              </Link>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }
