@@ -1,13 +1,20 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "./firebase";
+import { createUserDoc } from "../../actions/addUser";
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
 
   try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    console.error("Error signing in with Google", error);
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    if (user) {
+      await createUserDoc(user);
+    } else {
+      console.log("hello");
+    }
+  } catch (e) {
+    console.log(e);
   }
 }
 
