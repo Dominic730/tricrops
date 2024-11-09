@@ -1,13 +1,13 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import addToCart from "@/actions/addToCart";
-import { auth } from "@/lib/firebase/firebase";
-import { onAuthStateChanged, User } from "firebase/auth";
-import { Minus, Plus } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import addCart from "@/actions/addCart";
+import { Minus, Plus } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { auth } from "@/lib/firebase/firebase";
+import { Button } from "@/components/ui/button";
 import fetchProduct from "@/actions/fetchProduct";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 interface Product {
   id: string;
@@ -61,23 +61,29 @@ export default function Product() {
 
   const price = product.productprice;
 
-  async function submitData() {
+  async function submitData(product: Product) {
     if (productid) {
-      const { productId } = productid;
-      const price = totalCost;
+      const productName = product.productname;
+      const price = product.productprice;
       const userId = user?.uid;
       console.log(userId);
 
       try {
-        await addToCart({ productId, price, weight, userId });
+        if (userId !== null) {
+          addCart({ productName, price, weight, userId });
+        }
+        alert("Product added to cart");
       } catch (e) {
         console.log(e);
+        alert("Failed to add product to cart");
       }
+      setWeight(0);
+      setTotalCost(0);
     }
   }
   return (
-    <div className="md:h-screen flex justify-center items-center py-20 px-5 md:px-0 md:py-0">
-      <div className="flex flex-col md:flex-row md:gap-20">
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col lg:flex-row">
         <div className="flex justify-center items-center">
           <div className="w-[300px] aspect-square flex items-center">
             <Image
@@ -120,7 +126,7 @@ export default function Product() {
                   className="bg-green-500 hover:bg-green-400"
                   disabled={weight === 0}
                   onClick={() => {
-                    submitData();
+                    submitData(product);
                   }}
                 >
                   Add to Sack

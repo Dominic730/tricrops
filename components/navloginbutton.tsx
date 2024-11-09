@@ -1,25 +1,11 @@
 "use client";
 import Link from "next/link";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
-import {
-  CircleUserRound,
-  Loader,
-  LogIn,
-  LogOut,
-  ShoppingCart,
-  UserPen,
-} from "lucide-react";
 import { useEffect, useState } from "react";
+import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { signOut } from "@/lib/firebase/auth";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
+import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, UserPen } from "lucide-react";
 
 export default function NavLoginButton() {
   const [isMounted, setIsMounted] = useState(false);
@@ -92,10 +78,22 @@ export default function NavLoginButton() {
                   <NavigationMenuLink asChild>
                     <Link
                       className="text-sm text-center flex gap-2 items-center"
-                      href="/signup"
+                      href="/orders"
                     >
                       <ShoppingCart />
                       My Orders
+                    </Link>
+                  </NavigationMenuLink>
+                </li>
+                <div className="w-full border border-gray-600 my-2" />
+                <li className="w-full">
+                  <NavigationMenuLink asChild>
+                    <Link
+                      className="text-sm text-center flex gap-2 items-center"
+                      href="/cart"
+                    >
+                      <ShoppingCart />
+                      Cart
                     </Link>
                   </NavigationMenuLink>
                 </li>
