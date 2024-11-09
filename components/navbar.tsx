@@ -60,7 +60,7 @@ export function Navbar() {
               <NavLoginButton />
             </div>
             
-            <div className="flex sm:hidden">
+            <div className="flex md:hidden">
               <NavLoginButton />
             </div>
 

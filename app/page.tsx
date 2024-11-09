@@ -1,8 +1,8 @@
 "use client";
+
 import ProductCard from "@/components/productcard";
-import { db } from "@/lib/firebase/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import fetchAllProducts from "@/actions/fetchAllProducts"
 
 interface Product {
   id: string;
@@ -14,17 +14,14 @@ interface Product {
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      const querySnapshot = await getDocs(collection(db, "products"));
-      const productsArray = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<Product, "id">),
-      }));
-      setProducts(productsArray);
-    };
-    fetchProducts();
+  const FetchData = useCallback(async () => {
+    const data = await fetchAllProducts();
+    setProducts(data ?? []);
   }, []);
+
+  useEffect(() => {
+    FetchData();
+  }, [FetchData]);
   return (
     <div className="container mx-auto px-4 pt-28 pb-5">
       <div className="flex flex-wrap justify-center gap-5">
