@@ -8,11 +8,23 @@ import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, UserPen } from "lucide-react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
+import fetchName from "@/actions/fetchName";
 
 export default function NavLoginButton() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (user?.uid) {
+      fetchName(user.uid).then((item) => {
+        if (item) {
+          setName(item);
+        }
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -44,7 +56,7 @@ export default function NavLoginButton() {
               {user ? <CircleUserRound />  : ""}
               
               <span className="text-sm font-medium">
-                {user ? "Account" : "Login"}
+                {user ? <div>{name}</div> : "Login"}
               </span>
             </NavigationMenuTrigger>
             <NavigationMenuContent className="">
