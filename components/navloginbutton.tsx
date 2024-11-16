@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import fetchName from "@/actions/fetchName";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, UserPen } from "lucide-react";
+import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, BaggageClaim, UserPen, Truck } from "lucide-react";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
-import fetchName from "@/actions/fetchName";
 
 export default function NavLoginButton() {
   const router = useRouter();
@@ -38,8 +38,9 @@ export default function NavLoginButton() {
 
   const navigationItems = [
     { href: "/profile", label: "My Profile", icon: <UserPen /> },
-    { href: "/orders", label: "My Orders", icon: <ShoppingCart /> },
+    { href: "/orders", label: "My Orders", icon: <Truck /> },
     { href: "/cart", label: "Cart", icon: <ShoppingCart /> },
+    { href: "/sack", label: "Sack", icon: <BaggageClaim /> },
   ];
 
   const handleLogOut = async () => {

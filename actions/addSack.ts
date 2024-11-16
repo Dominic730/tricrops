@@ -3,7 +3,7 @@
 import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, get, set, update } from "firebase/database";
 
-interface AddToCartProps {
+interface AddToSackProps {
     productName: string;
     image: string;
     price: number;
@@ -11,8 +11,8 @@ interface AddToCartProps {
     userId?: string;
 }
 
-export default async function addToCart({ productName, image, price, weight, userId }: AddToCartProps) {
-    const cartRef = ref(realtimeDB, `cart/${userId}/${productName}`);
+export default async function addToSack({ productName, image, price, weight, userId }: AddToSackProps) {
+    const cartRef = ref(realtimeDB, `sack/${userId}/${productName}`);
     const snapshot = await get(cartRef);
 
     if (snapshot.exists()) {
@@ -25,8 +25,8 @@ export default async function addToCart({ productName, image, price, weight, use
         });
     } else {
         // Product doesn't exist, so we create a new entry
-        await set(cartRef, { 
-            image,
+        await set(cartRef, {
+            image, 
             price,
             weight,
         });

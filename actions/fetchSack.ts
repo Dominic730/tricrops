@@ -3,28 +3,28 @@
 import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, onValue } from "firebase/database";
 
-interface CartItem {
+interface SackItem {
     image: string;
     price: number;
     weight: number;
 };
 
-interface CartDataSub {
-    [productId: string]: CartItem;
+interface SackDataSub {
+    [productId: string]: SackItem;
 };
 
-export default async function fetchCart(userID: string): Promise<CartDataSub> {
-    const cartRef = ref(realtimeDB, `cart/${userID}`);
-    return new Promise<CartDataSub>((resolve, reject) => {
+export default async function fetchSack(userID: string): Promise<SackDataSub> {
+    const cartRef = ref(realtimeDB, `sack/${userID}`);
+    return new Promise<SackDataSub>((resolve, reject) => {
         onValue(cartRef, (snapshot) => {
             const data = snapshot.val();
-            const cartData: CartDataSub = {};
+            const sackData: SackDataSub = {};
             if (data !== null) {
                 for (const key in data) {
-                    cartData[key] = data[key];
+                    sackData[key] = data[key];
                 }
             }
-            resolve(cartData);
+            resolve(sackData);
         }, (error) => {
             reject(error);
         });

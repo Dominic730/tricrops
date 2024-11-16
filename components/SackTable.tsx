@@ -2,33 +2,33 @@
 
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
-import fetchCart from "@/actions/fetchCart";
-import React, { useEffect, useState } from "react";
+import fetchSack from "@/actions/fetchSack";
+import { useEffect, useState, useCallback } from "react";
 import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, update, remove } from "firebase/database";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface CartItem {
+interface SackItem {
     image: string;
     price: number;
     weight: number;
-}
+};
 
-interface CartDataSub {
-    [productId: string]: CartItem;
-}
+interface SackDataSub {
+    [productId: string]: SackItem;
+};
 
 interface CartTableProps {
     userID: string;
 }
 
 const CartTable: React.FC<CartTableProps> = ({ userID }) => {
-    const [cartData, setCartData] = useState<CartDataSub | null>(null);
+    const [sackData, setSackData] = useState<SackDataSub | null>(null);
     const [grandTotal, setGrandTotal] = useState<number>(0);
 
-    const fetchData = React.useCallback(async () => {
-        const data = await fetchCart(userID);
-        setCartData(data);
+    const fetchData = useCallback(async () => {
+        const data = await fetchSack(userID);
+        setSackData(data);
     }, [userID]);
 
     useEffect(() => {   
@@ -36,21 +36,21 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
     }, [fetchData]);
 
     useEffect(() => {
-        if (cartData) {
-            const total = Object.values(cartData).reduce((sum, item) => sum + item.price * item.weight, 0);
+        if (sackData) {
+            const total = Object.values(sackData).reduce((sum, item) => sum + item.price * item.weight, 0);
             setGrandTotal(total);
         }
-    }, [cartData]);
+    }, [sackData]);
 
     const updateWeight = async (productId: string, newWeight: number) => {
         if (newWeight < 0) return; // Prevent negative weight
-        const productRef = ref(realtimeDB, `cart/${userID}/${productId}`);
+        const productRef = ref(realtimeDB, `sack/${userID}/${productId}`);
         await update(productRef, { weight: newWeight });
         await fetchData();
     };
 
     const deleteProduct = async (productId: string) => {
-        const productRef = ref(realtimeDB, `cart/${userID}/${productId}`);
+        const productRef = ref(realtimeDB, `sack/${userID}/${productId}`);
         try {
             await remove(productRef);
             console.log(`${productId} removed from cart`);
@@ -62,7 +62,7 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
 
     return (
         <div className="p-4 text-lg">
-            <Table className="w-[80dvw] border border-gray-300 shadow-md rounded-lg">
+            <Table className="sm:w-[90dvw] lg:w-[80dvw]  border border-gray-300 shadow-md rounded-lg">
                 <TableHeader className="bg-gray-100 hidden md:table-header-group">
                     <TableRow>
                         <TableHead className="p-4 font-semibold text-xl text-gray-600 text-left">Product Details</TableHead>
@@ -72,8 +72,8 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {cartData ? (
-                        Object.entries(cartData).map(([productId, product]) => (
+                    {sackData && Object.keys(sackData).length > 0 ? (
+                        Object.entries(sackData).map(([productId, product]) => (
                             <TableRow key={productId} className="border-b border-gray-200 hover:bg-gray-50 transition duration-150">
                                 <TableCell className="py-4 pr-4">
                                     <div className="flex items-center space-x-4">
@@ -113,10 +113,12 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
                             </TableCell>
                         </TableRow>
                     )}
-                    <TableRow>
-                        <TableCell colSpan={3} className="text-right text-xl p-4 font-semibold">Grand Total:</TableCell>
-                        <TableCell className="p-4 text-center text-2xl font-semibold">₹ {grandTotal}</TableCell>
-                    </TableRow>
+                    {grandTotal > 0 && (
+                        <TableRow>
+                            <TableCell colSpan={2} className="text-right p-4 font-semibold">Grand Total:</TableCell>
+                            <TableCell className="text-center p-4 font-semibold">{grandTotal.toFixed(2)}</TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </div>
