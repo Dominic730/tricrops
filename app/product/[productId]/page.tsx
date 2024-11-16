@@ -126,20 +126,19 @@ export default function Product() {
                 <p>&#8377;{totalCost}</p>
               </div>
               <div className="">
-                <Button className="bg-green-500 hover:bg-green-400" disabled={weight === 0} onClick={() => { submitData(product); }} >
-                  <ShoppingCart /> Add to Cart
+                <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { submitData(product); }} >
+                  <ShoppingCart /> Add to Sack
                 </Button>
               </div>
             </div>
             <div className="flex flex-col gap-5 md:gap-8 h-full justify-between">
               <div className="flex flex-col gap-2 text-xl md:text-3xl">
                 <p className="font-medium">Weight</p>
-                <div className="flex gap-2 text-center justify-center rounded-md text-lg bg-[#f7f8fd]">
-                  <Minus
-                    size={24}
-                    onClick={handleDecrease}
-                  />
-                  <div className="pr-5">
+                <div className="flex gap-1 text-center items-center justify-center rounded-md text-lg bg-[#f7f8fd]">
+                  <div className="p-2">
+                    <Minus size={24} onClick={handleDecrease} />
+                  </div>
+                  <div className="">
                     <input type="number" value={weight} 
                       onChange={(e) => {
                         const newWeight = Number(
@@ -153,13 +152,12 @@ export default function Product() {
                     />
                     <span>Kg</span>
                   </div>
-                  <Plus
-                    onClick={handleIncrease}
-                    size={24}
-                  />
+                  <div className="p-2">
+                    <Plus onClick={handleIncrease} size={24} />
+                  </div>
                 </div>
               </div>
-              <Button className="bg-green-500 hover:bg-green-400 w-28">
+              <Button className="bg-green-500 hover:bg-green-400 w-full">
                 Sell
               </Button>
             </div>
