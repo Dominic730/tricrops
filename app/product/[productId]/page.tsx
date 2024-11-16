@@ -117,8 +117,8 @@ export default function Product() {
 
   return (
     <div className="container mx-auto px-4 flex justify-center items-center pt-28 pb-5">
-      <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl gap-10">
-        <div className="flex justify-center items-center">
+      <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl w-full items-center justify-center">
+        <div className="flex justify-center items-center md:w-1/2">
           <div className="w-[300px] aspect-square flex items-center">
             <Image
               src={product.productimage}
@@ -130,7 +130,7 @@ export default function Product() {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 md:w-1/2">
           <p className="text-3xl md:text-5xl font-[600]">
             {product.productname}
           </p>
