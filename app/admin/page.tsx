@@ -1,20 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  CardContent,
-} from "@/components/ui/card";
+
+import { Loader } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import addProducts from "@/actions/addproducts";
 import { auth } from "@/lib/firebase/firebase";
+import { Button } from "@/components/ui/button";
+import addProducts from "@/actions/addproducts";
 import { UploadButton } from "@/utils/uploadthing";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { Loader } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Card, CardFooter, CardHeader, CardContent } from "@/components/ui/card";
 
 export default function Admin() {
   const [loading, setLoading] = useState(true);
