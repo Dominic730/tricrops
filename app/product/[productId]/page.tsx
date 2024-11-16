@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import addCart from "@/actions/addCart";
-import { useParams, useRouter } from "next/navigation";
+import addSack from "@/actions/addSack";
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase/firebase";
 import { Button } from "@/components/ui/button";
 import fetchProduct from "@/actions/fetchProduct";
+import { useParams, useRouter } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { Minus, Plus, ShoppingCart } from "lucide-react";
 
@@ -63,16 +64,17 @@ export default function Product() {
 
   const price = product.productprice;
 
-  async function submitData(product: Product) {
+  async function AddToSack(product: Product) {
     if (productid) {
       const productName = product.productname;
+      const image = product.productimage;
       const price = product.productprice;
       const userId = user?.uid;
       console.log(userId);
 
       try {
         if (!user || user !== null || user !== undefined) {
-          addCart({ productName, price, weight, userId });
+          addSack({ productName, image, price, weight, userId });
           alert("Product added to cart");
         } else {
           alert("Please login to add product to cart");
@@ -86,6 +88,32 @@ export default function Product() {
       setTotalCost(0);
     }
   }
+
+  async function AddToCart(product: Product) {
+    if (productid) {
+      const productName = product.productname;
+      const image = product.productimage;
+      const price = product.productprice;
+      const userId = user?.uid;
+      console.log(userId);
+
+      try {
+        if (!user || user !== null || user !== undefined) {
+          addCart({ productName, image, price, weight, userId });
+          alert("Product added to cart");
+        } else {
+          alert("Please login to add product to cart");
+          router.push("/login");
+        }
+      } catch (e) {
+        console.log(e);
+        alert("Failed to add product to cart");
+      }
+      setWeight(0);
+      setTotalCost(0);
+    }
+  }
+
   return (
     <div className="container mx-auto px-4 flex justify-center items-center pt-28 pb-5">
       <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl">
@@ -126,7 +154,7 @@ export default function Product() {
                 <p>&#8377;{totalCost}</p>
               </div>
               <div className="">
-                <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { submitData(product); }} >
+                <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { AddToSack(product); }} >
                   <ShoppingCart /> Add to Sack
                 </Button>
               </div>
@@ -157,8 +185,8 @@ export default function Product() {
                   </div>
                 </div>
               </div>
-              <Button className="bg-green-500 hover:bg-green-400 w-full">
-                Sell
+              <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { AddToCart(product); }} >
+                Buy
               </Button>
             </div>
           </div>
