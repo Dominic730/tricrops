@@ -9,6 +9,7 @@ import { ref, update, remove } from "firebase/database";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 interface CartItem {
+    image: string;
     price: number;
     weight: number;
 }
