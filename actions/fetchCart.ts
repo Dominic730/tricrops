@@ -4,6 +4,7 @@ import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, onValue } from "firebase/database";
 
 interface CartItem {
+    image: string;
     price: number;
     weight: number;
 };
