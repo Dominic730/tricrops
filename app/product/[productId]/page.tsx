@@ -9,7 +9,8 @@ import { Button } from "@/components/ui/button";
 import fetchProduct from "@/actions/fetchProduct";
 import { useParams, useRouter } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { AlertCircle, Minus, Plus, ShoppingCart } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface Product {
   id: string;
@@ -116,8 +117,8 @@ export default function Product() {
 
   return (
     <div className="container mx-auto px-4 flex justify-center items-center pt-28 pb-5">
-      <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl">
-        <div className="flex justify-center items-center">
+      <div className="flex flex-col lg:flex-row bg-white p-5 rounded-3xl w-full items-center justify-center">
+        <div className="flex justify-center items-center md:w-1/2">
           <div className="w-[300px] aspect-square flex items-center">
             <Image
               src={product.productimage}
@@ -129,7 +130,7 @@ export default function Product() {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 md:w-1/2">
           <p className="text-3xl md:text-5xl font-[600]">
             {product.productname}
           </p>
@@ -154,20 +155,31 @@ export default function Product() {
                 <p>&#8377;{totalCost}</p>
               </div>
               <div className="">
-                <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { AddToSack(product); }} >
+                <Button
+                  className="bg-green-500 hover:bg-green-400 w-full"
+                  disabled={weight === 0}
+                  onClick={() => {
+                    AddToSack(product);
+                  }}
+                >
                   <ShoppingCart /> Add to Sack
                 </Button>
               </div>
             </div>
             <div className="flex flex-col gap-5 md:gap-8 h-full justify-between">
-              <div className="flex flex-col gap-2 text-xl md:text-3xl">
+              <div className="flex flex-col gap-2 text-xl md:text-3xl mb-4 md:mb-0">
                 <p className="font-medium">Weight</p>
                 <div className="flex gap-1 text-center items-center justify-center rounded-md text-lg bg-[#f7f8fd]">
                   <div className="p-2">
-                    <Minus size={24} onClick={handleDecrease} />
+                    <Minus
+                      size={24}
+                      onClick={handleDecrease}
+                    />
                   </div>
-                  <div className="">
-                    <input type="number" value={weight} 
+                  <div className="flex flex-row">
+                    <input
+                      type="number"
+                      value={weight}
                       onChange={(e) => {
                         const newWeight = Number(
                           e.target.value.replace(/^0+/, "")
@@ -176,19 +188,40 @@ export default function Product() {
                         setWeight(newWeight);
                         setTotalCost(newWeight * price);
                       }}
-                      className="text-center w-10 bg-transparent outline-none"
+                      className="text-center w-14 bg-transparent outline-none"
                     />
                     <span>Kg</span>
                   </div>
                   <div className="p-2">
-                    <Plus onClick={handleIncrease} size={24} />
+                    <Plus
+                      onClick={handleIncrease}
+                      size={24}
+                    />
                   </div>
                 </div>
               </div>
-              <Button className="bg-green-500 hover:bg-green-400 w-full" disabled={weight === 0} onClick={() => { AddToCart(product); }} >
+              <Button
+                className="bg-green-500 hover:bg-green-400 w-full"
+                disabled={weight === 0}
+                onClick={() => {
+                  AddToCart(product);
+                }}
+              >
                 Buy
               </Button>
             </div>
+          </div>
+          <div className="w-full md:w-[500px]">
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Alert</AlertTitle>
+              <AlertDescription>
+                All spices undergo quality and quantity checks upon arrival.
+                Standard pricing applies to top-quality spices, while adjusted
+                rates are offered for lower-grade ones. This ensures our
+                commitment to excellence.
+              </AlertDescription>
+            </Alert>
           </div>
         </div>
       </div>
