@@ -65,47 +65,67 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
             <Table className="w-[80dvw] border border-gray-300 shadow-md rounded-lg">
                 <TableHeader className="bg-gray-100 hidden md:table-header-group">
                     <TableRow>
-                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-left">Product Details</TableHead>
-                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-right">Price</TableHead>
-                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-center">Quantity</TableHead>
-                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-right">Total</TableHead>
+                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-left"> Product Details </TableHead>
+                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-right"> Price </TableHead>
+                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-center"> Quantity </TableHead>
+                        <TableHead className="p-4 font-semibold text-xl text-gray-600 text-right"> Total </TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {cartData ? (
-                        Object.entries(cartData).map(([productId, product]) => (
-                            <TableRow key={productId} className="border-b border-gray-200 hover:bg-gray-50 transition duration-150">
-                                <TableCell className="py-4 pr-4">
-                                    <div className="flex items-center space-x-4">
-                                        <Image src={product.image} alt={productId} width={80} height={80} className="rounded-md" />
-                                        <div>
-                                            <h3 className="text-lg font-medium text-gray-900">{productId}</h3>
-                                            <p className="text-sm text-gray-500">Product ID: {productId}</p>
-                                            <button onClick={() => deleteProduct(productId)} className="text-sm text-blue-600 hover:text-blue-800 hover:underline mt-1">
-                                                Delete
+                    {cartData && Object.keys(cartData).length > 0 ? (
+                        <>
+                            {Object.entries(cartData).map(([productId, product]) => (
+                                <TableRow key={productId} className="border-b border-gray-200 hover:bg-gray-50 transition duration-150 md:table-row flex flex-col items-start md:items-center">
+                                    {/* Product Details */}
+                                    <TableCell className="p-4 md:table-cell w-full">
+                                        <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
+                                            <Image src={product.image} alt={productId} width={80} height={80} className="rounded-md" loading="lazy"/>
+                                            <div>
+                                                <h3 className="text-lg font-medium text-gray-900">{productId}</h3>
+                                                <p className="text-sm text-gray-500">Product ID: {productId}</p>
+                                                <button onClick={() => deleteProduct(productId)} className="text-sm text-blue-600 hover:text-blue-800 hover:underline mt-1">
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </TableCell>
+
+                                    {/* Price */}
+                                    <TableCell className="py-2 px-4 text-right w-full md:table-cell">
+                                        <span className="block md:hidden font-semibold">Price:</span>
+                                        ₹{product.price.toFixed(2)}
+                                    </TableCell>
+
+                                    {/* Quantity */}
+                                    <TableCell className="py-2 px-4 text-center w-full md:table-cell">
+                                        <div className="flex items-center justify-start md:justify-center">
+                                            <button onClick={() => updateWeight(productId, product.weight - 1)} className="p-2">
+                                                <Minus className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
+                                            </button>
+                                            <span className="text-lg font-semibold mx-2">{product.weight}{" "}Kg</span>
+                                            <button onClick={() => updateWeight(productId, product.weight + 1)} className="p-2">
+                                                <Plus className="w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8 lg:w-10 lg:h-10" />
                                             </button>
                                         </div>
-                                    </div>
+                                    </TableCell>
+
+                                    {/* Total */}
+                                    <TableCell className="py-2 px-4 text-right w-full md:table-cell">
+                                        <span className="block md:hidden font-semibold">Total:</span>
+                                        ₹{(product.price * product.weight).toFixed(2)}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                            {/* Grand Total */}
+                            <TableRow className="flex flex-col md:table-row">
+                                <TableCell colSpan={3} className="p-4 text-right text-xl font-semibold md:table-cell">
+                                    Grand Total:
                                 </TableCell>
-                                <TableCell className="text-right">
-                                    <span className="text-lg font-medium">₹ {product.price.toFixed(2)}</span>
-                                </TableCell>
-                                <TableCell className="text-center">
-                                    <div className="flex items-center justify-center">
-                                        <button onClick={() => updateWeight(productId, product.weight - 1)} className="p-2">
-                                            <Minus size={24} />
-                                        </button>
-                                        <span className="text-xl font-semibold">{product.weight}</span>
-                                        <button onClick={() => updateWeight(productId, product.weight + 1)} className="p-2">
-                                            <Plus size={24} />
-                                        </button>
-                                    </div>
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <span className="text-lg font-medium">₹ {(product.price * product.weight).toFixed(2)}</span>
+                                <TableCell className="p-4 text-right text-2xl font-semibold">
+                                    ₹{grandTotal.toFixed(2)}
                                 </TableCell>
                             </TableRow>
-                        ))
+                        </>
                     ) : (
                         <TableRow>
                             <TableCell colSpan={4} className="text-center p-4 text-gray-500">
@@ -113,14 +133,11 @@ const CartTable: React.FC<CartTableProps> = ({ userID }) => {
                             </TableCell>
                         </TableRow>
                     )}
-                    <TableRow>
-                        <TableCell colSpan={3} className="text-right text-xl p-4 font-semibold">Grand Total:</TableCell>
-                        <TableCell className="p-4 text-center text-2xl font-semibold">₹ {grandTotal}</TableCell>
-                    </TableRow>
                 </TableBody>
             </Table>
         </div>
     );
 };
+
 
 export default CartTable;
