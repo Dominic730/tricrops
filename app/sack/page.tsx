@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import SackTable from '@/components/SackTable';
+import fetchSack from '@/actions/fetchSack';
 import { auth } from '@/lib/firebase/firebase';
+import MultiTable from '@/components/MultiTable';
 import { onAuthStateChanged } from 'firebase/auth';
-
 
 export default function Page() {
     const [userID, setUserID] = useState('');
@@ -22,7 +22,7 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center">
                 <h1 className="text-3xl font-bold underline mb-6">Sack</h1>
                 {userID ? (
-                    <SackTable userID={userID} />
+                    <MultiTable userID={userID} type='sack' fetchFunction={fetchSack} />
                 ) : (
                     <p className="text-center text-gray-500">Please log in to view your cart.</p>
                 )}

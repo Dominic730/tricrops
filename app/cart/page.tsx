@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import CartTable from '@/components/CartTable';
+import fetchCart from '@/actions/fetchCart';
 import { auth } from '@/lib/firebase/firebase';
+import MultiTable from '@/components/MultiTable';
 import { onAuthStateChanged } from 'firebase/auth';
 
 
@@ -22,7 +23,7 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center">
                 <h1 className="text-3xl font-bold underline mb-6">Cart</h1>
                 {userID ? (
-                    <CartTable userID={userID} />
+                    <MultiTable userID={userID} type='cart' fetchFunction={fetchCart} />
                 ) : (
                     <p className="text-center text-gray-500">Please log in to view your cart.</p>
                 )}

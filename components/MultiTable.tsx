@@ -2,55 +2,56 @@
 
 import Image from "next/image";
 import { Minus, Plus } from "lucide-react";
-import fetchSack from "@/actions/fetchSack";
 import { useEffect, useState, useCallback } from "react";
 import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, update, remove } from "firebase/database";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-interface SackItem {
+interface TableItem {
     image: string;
     price: number;
     weight: number;
 };
 
-interface SackDataSub {
-    [productId: string]: SackItem;
+interface TableDataSub {
+    [productId: string]: TableItem;
 };
 
-interface SackTableProps {
+interface TableProps {
     userID: string;
+    type: "sack" | "cart";
+    fetchFunction: (userID: string) => Promise<TableDataSub>;
 }
 
-const SackTable: React.FC<SackTableProps> = ({ userID }) => {
-    const [sackData, setSackData] = useState<SackDataSub | null>(null);
+const MultiTable: React.FC<TableProps> = ({ userID, type, fetchFunction }) => {
+    const [data, setData] = useState<TableDataSub | null>(null);
     const [grandTotal, setGrandTotal] = useState<number>(0);
 
     const fetchData = useCallback(async () => {
-        const data = await fetchSack(userID);
-        setSackData(data);
-    }, [userID]);
+        const fetchedData = await fetchFunction(userID);
+        setData(fetchedData);
+    }, [userID,fetchFunction]);
 
     useEffect(() => {   
         fetchData();
     }, [fetchData]);
 
     useEffect(() => {
-        if (sackData) {
-            const total = Object.values(sackData).reduce((sum, item) => sum + item.price * item.weight, 0);
+        if (data) {
+            const total = Object.values(data).reduce((sum, item) => sum + item.price * item.weight, 0);
             setGrandTotal(total);
         }
-    }, [sackData]);
+    }, [data]);
 
     const updateWeight = async (productId: string, newWeight: number) => {
         if (newWeight < 0) return; // Prevent negative weight
-        const productRef = ref(realtimeDB, `sack/${userID}/${productId}`);
+        const productRef = ref(realtimeDB, `${type}/${userID}/${productId}`);
         await update(productRef, { weight: newWeight });
         await fetchData();
     };
 
     const deleteProduct = async (productId: string) => {
-        const productRef = ref(realtimeDB, `sack/${userID}/${productId}`);
+        const productRef = ref(realtimeDB, `${type}/${userID}/${productId}`);
         try {
             await remove(productRef);
             console.log(`${productId} removed from cart`);
@@ -72,9 +73,9 @@ const SackTable: React.FC<SackTableProps> = ({ userID }) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {sackData && Object.keys(sackData).length > 0 ? (
+                    {data && Object.keys(data).length > 0 ? (
                         <>
-                            {Object.entries(sackData).map(([productId, product]) => (
+                            {Object.entries(data).map(([productId, product]) => (
                                 <TableRow key={productId} className="border-b border-gray-200 hover:bg-gray-50 transition duration-150 md:table-row flex flex-col items-start md:items-center">
                                     {/* Product Details */}
                                     <TableCell className="p-4 md:table-cell w-full">
@@ -109,7 +110,7 @@ const SackTable: React.FC<SackTableProps> = ({ userID }) => {
                                         </div>
                                     </TableCell>
 
-                                    {/* Total */}
+                                    {/* Total Price */}
                                     <TableCell className="py-2 px-4 text-right w-full md:table-cell">
                                         <span className="block md:hidden font-semibold">Total:</span>
                                         ₹{(product.price * product.weight).toFixed(2)}
@@ -139,4 +140,4 @@ const SackTable: React.FC<SackTableProps> = ({ userID }) => {
     );
 };
 
-export default SackTable;
+export default MultiTable;
