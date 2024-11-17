@@ -1,15 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { ShoppingBag, Shovel, Menu } from "lucide-react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState } from "react";
 import SearchBar from "./searchbar";
+import { motion } from "framer-motion";
 import NavLoginButton from "./navloginbutton";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { ShoppingBag, Shovel, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import CompanyLogo from "@/public/Tripcrop.png";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -25,17 +26,8 @@ export function Navbar() {
       <div className="container mx-auto px-6 py-4 text-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-5">
-            <Link
-              href="/"
-              className="flex flex-col items-center justify-center"
-            >
-              <Image
-                src="/Tripcrop.png"
-                alt="Tricrops Logo"
-                className="object-cover"
-                width={60}
-                height={60}
-              />
+            <Link href="/" className="flex flex-col items-center justify-center">
+              <Image src={CompanyLogo} alt="Tricrops Logo" width={60} height={60} priority={true} style={{ width: 'auto', height: 'auto' }}/>
               <span className="text-sm font-semibold text-black">Tricrops</span>
             </Link>
           </div>
@@ -46,27 +38,15 @@ export function Navbar() {
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-4">
               {pathname === "/" ? (
-                <Link
-                  href="/sell"
-                  className="text-black hover:text-opacity-80 transition duration-200"
-                >
-                  <Button
-                    variant="ghost"
-                    className="flex items-center space-x-2"
-                  >
+                <Link href="/sell" className="text-black hover:text-opacity-80 transition duration-200">
+                  <Button variant="ghost" className="flex items-center space-x-2">
                     <ShoppingBag className="h-5 w-5 text-black" />
                     <span>Become a Seller</span>
                   </Button>
                 </Link>
               ) : (
-                <Link
-                  href="/buy"
-                  className="text-black hover:text-opacity-80 transition duration-200"
-                >
-                  <Button
-                    variant="ghost"
-                    className="flex items-center space-x-2"
-                  >
+                <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200">
+                  <Button variant="ghost" className="flex items-center space-x-2">
                     <Shovel className="h-5 w-5 text-black" />
                     <span>Farming Essentials</span>
                   </Button>
@@ -79,34 +59,18 @@ export function Navbar() {
               <NavLoginButton />
             </div>
 
-            <Sheet
-              open={isOpen}
-              onOpenChange={setIsOpen}
-            >
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden text-black"
-                >
+                <Button variant="ghost" size="icon" className="md:hidden text-black">
                   <Menu size={20} />
                 </Button>
               </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-72 sm:w-80 bg-gradient-to-r from-indigo-600 to-purple-600 p-6"
-              >
+              <SheetContent side="right" className="w-72 sm:w-80 bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
                 <nav className="flex flex-col space-y-6">
-                  <Link
-                    href="/sell"
-                    className="text-black hover:text-opacity-80 transition duration-200"
-                  >
+                  <Link href="/seller" className="text-black hover:text-opacity-80 transition duration-200">
                     Become a Seller
                   </Link>
-                  <Link
-                    href="/buy"
-                    className="text-black hover:text-opacity-80 transition duration-200"
-                  >
+                  <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200">
                     Farming Essentials
                   </Link>
                   <NavLoginButton />
