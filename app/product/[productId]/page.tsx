@@ -142,17 +142,15 @@ export default function Product() {
             you for your understanding.
           </p>
           <div className="flex">
-            <div className="flex">
-              <p className="text-xl md:text-3xl font-medium">
-                &#8377;{price}/Kg
-              </p>
-            </div>
+            <p className="text-xl md:text-3xl font-medium">
+              &#8377; {price}/Kg
+            </p>
           </div>
           <div className="flex items-center justify-between md:justify-normal gap-5 md:gap-40 h-fit">
             <div className="flex flex-col gap-5 md:gap-8 h-full justify-between">
               <div className="flex flex-col gap-2 text-xl md:text-3xl">
                 <p className="font-medium">Estimated Price</p>
-                <p>&#8377;{totalCost}</p>
+                <p>&#8377; {totalCost}</p>
               </div>
               <div className="">
                 <Button
@@ -211,7 +209,7 @@ export default function Product() {
               </Button>
             </div>
           </div>
-          <div className="w-full md:w-[500px]">
+          <div className="w-full md:w-[550px]">
             <Alert variant="destructive">
               <AlertCircle className="h-4 w-4" />
               <AlertTitle>Alert</AlertTitle>
