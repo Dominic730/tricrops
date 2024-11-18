@@ -92,7 +92,7 @@ const MultiTable: React.FC<TableProps> = ({ userID, type, fetchFunction }) => {
                                     </TableCell>
 
                                     {/* Price */}
-                                    <TableCell className="py-2 px-4 text-right w-full md:table-cell">
+                                    <TableCell className="py-2 px-4 text-right text-lg font-semibold w-full md:table-cell">
                                         <span className="block md:hidden font-semibold">Price:</span>
                                         ₹{product.price.toFixed(2)}
                                     </TableCell>
@@ -111,7 +111,7 @@ const MultiTable: React.FC<TableProps> = ({ userID, type, fetchFunction }) => {
                                     </TableCell>
 
                                     {/* Total Price */}
-                                    <TableCell className="py-2 px-4 text-right w-full md:table-cell">
+                                    <TableCell className="py-2 px-4 text-right w-full text-lg font-semibold md:table-cell">
                                         <span className="block md:hidden font-semibold">Total:</span>
                                         ₹{(product.price * product.weight).toFixed(2)}
                                     </TableCell>
