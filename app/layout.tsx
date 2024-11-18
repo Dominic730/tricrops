@@ -15,8 +15,9 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Tripcrop",
-  description: "Tripcrop is an website made for selling spices and buying farming tools.",
+  title: "Tripcrops",
+  description:
+    "Sell your spices directly to us on Tripcrops with free pickup. We make it easy to sell your fresh spices, and you can also purchase a wide range of agricultural tools to support your farming needs. Join us today and take your farming business to the next level!",
 };
 
 export default function RootLayout({
@@ -26,13 +27,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <div className="fixed z-50 w-full">
           <Navbar />
         </div>
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </body>
     </html>
   );
