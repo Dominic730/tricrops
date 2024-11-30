@@ -7,6 +7,7 @@ interface ProductCardProps {
   productPrice: number;
   productImage: string;
   id: string;
+  link: string;
 }
 
 export default function ProductCard({
@@ -14,12 +15,16 @@ export default function ProductCard({
   productPrice,
   productImage,
   id,
+  link,
 }: ProductCardProps) {
   const price = productPrice;
 
   return (
     <div className="w-full h-full border-2 border-gray-200 shadow-sm rounded-md bg-white">
-      <Link href={`/product/${id}`} className="h-full">
+      <Link
+        href={`${link}${id}`}
+        className="h-full"
+      >
         <div className="w-full flex justify-center">
           <Image
             src={productImage}

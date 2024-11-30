@@ -12,7 +12,7 @@ interface Product {
   productimage: string;
 }
 
-export default function Home() {
+export default function AdminProducts() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Home() {
         {products.map((product) => (
           <div key={product.id}>
             <ProductCard
-              link="/product/"
+              link="/admin/"
               id={product.id}
               productName={product.productname}
               productPrice={product.productprice}
