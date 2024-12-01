@@ -20,23 +20,26 @@ export default function ProductCard({
   const price = productPrice;
 
   return (
-    <div className="w-full h-full border-2 border-gray-200 shadow-sm rounded-md bg-white">
+    <div className="w-full h-full border border-gray-200 shadow-lg rounded-lg bg-white hover:shadow-xl transition-shadow duration-300">
       <Link
         href={`${link}${id}`}
-        className="h-full"
+        className="h-full flex flex-col"
       >
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center p-4">
           <Image
             src={productImage}
             alt={productName}
             width={1000}
             height={1000}
-            className="w-[238px] aspect-square object-contain"
+            className="w-[238px] aspect-square object-contain rounded-md"
           />
         </div>
-        <div className="flex flex-col pb-5 gap-2">
-          <div className="text-center text-xl font-medium">{productName}</div>
-          <div className="text-center text-lg">
+
+        <div className="flex flex-col px-4 pb-5 gap-2">
+          <div className="text-center text-xl font-semibold text-gray-800 truncate">
+            {productName}
+          </div>
+          <div className="text-center text-lg font-medium text-gray-600">
             <p>&#8377;{price}/Kg</p>
           </div>
         </div>
