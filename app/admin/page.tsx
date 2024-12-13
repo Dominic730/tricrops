@@ -16,9 +16,7 @@ import {
   CardHeader,
   CardContent,
 } from "@/components/ui/card";
-import Image from "next/image";
 import fetchAllProducts from "@/actions/fetchAllProducts";
-import Link from "next/link";
 import AdminSidebar from "@/components/adminsidebar";
 
 interface Product {
@@ -69,7 +67,11 @@ export default function Admin() {
   }
 
   if (!user) {
-    return <div>Not Authenticated</div>;
+    return (
+      <div className="flex justify-center items-center h-screen w-screen">
+        Not Authenticated
+      </div>
+    );
   }
 
   return (
