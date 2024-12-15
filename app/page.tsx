@@ -36,7 +36,7 @@ export default function Home() {
       </div>
     );
   return (
-    <div className="container mx-auto px-4 pt-28 pb-5">
+    <div className="container mx-auto px-4 pt-40 pb-5">
       <div className="flex flex-wrap justify-center gap-5">
         {products.map((product) => (
           <div key={product.id}>

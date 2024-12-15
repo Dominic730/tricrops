@@ -7,8 +7,24 @@ import { useEffect, useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, BaggageClaim, UserPen, Truck } from "lucide-react";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
+import {
+  CircleUserRound,
+  Loader,
+  LogIn,
+  LogOut,
+  ShoppingCart,
+  BaggageClaim,
+  UserPen,
+  Truck,
+} from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 export default function NavLoginButton() {
   const router = useRouter();
@@ -53,9 +69,9 @@ export default function NavLoginButton() {
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="mb-0 bg-blue-300 hover:bg-blue-200 flex gap-2 items-center px-3 py-2 rounded-md transition">
-              {user ? <CircleUserRound />  : ""}
-              
+            <NavigationMenuTrigger className="mb-0 bg-[#f8f9fa] flex gap-2 items-center px-3 py-2 rounded-md transition">
+              {user ? <CircleUserRound /> : ""}
+
               <span className="text-sm font-medium">
                 {user ? <div>{name}</div> : "Login"}
               </span>
@@ -66,9 +82,16 @@ export default function NavLoginButton() {
                   <>
                     <li className="w-full">
                       <NavigationMenuLink asChild>
-                        <Link className="text-sm flex gap-2 items-center" href="/login">
+                        <Link
+                          className="text-sm flex gap-2 items-center"
+                          href="/login"
+                        >
                           <LogIn />
-                          <span>Login<br/>Sign Up</span>
+                          <span>
+                            Login
+                            <br />
+                            Sign Up
+                          </span>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -76,9 +99,15 @@ export default function NavLoginButton() {
                 ) : (
                   <>
                     {navigationItems.map((item) => (
-                      <li key={item.href} className="w-full">
+                      <li
+                        key={item.href}
+                        className="w-full"
+                      >
                         <NavigationMenuLink asChild>
-                          <Link className="text-sm flex gap-2 items-center" href={item.href}>
+                          <Link
+                            className="text-sm flex gap-2 items-center"
+                            href={item.href}
+                          >
                             {item.icon}
                             <span>{item.label}</span>
                           </Link>
@@ -88,7 +117,10 @@ export default function NavLoginButton() {
                     ))}
                     <li className="w-full">
                       <NavigationMenuLink asChild>
-                        <button className="text-sm flex gap-2 items-center w-full text-left" onClick={handleLogOut} >
+                        <button
+                          className="text-sm flex gap-2 items-center w-full text-left"
+                          onClick={handleLogOut}
+                        >
                           <LogOut />
                           <span>Log Out</span>
                         </button>

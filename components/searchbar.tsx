@@ -12,7 +12,7 @@ export default function SearchBar() {
   return (
     <form
       onSubmit={handleSearch}
-      className="flex items-center border-2 border-blue-400 rounded-md p-2 shadow-sm bg-gray-100"
+      className="flex items-center border-2 border-gray-200 rounded-md p-2 shadow-sm bg-gray-100"
     >
       <Search className="text-gray-500 w-5 h-5" />
       <input
