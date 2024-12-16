@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth, realtimeDB } from "@/lib/firebase/firebase";
-import { ref, onValue } from "firebase/database";
+import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { fetchUserOrders } from "@/actions/fetchUserOrders"; // Import the function
 import Image from "next/image";
 
 interface OrderItem {
@@ -16,40 +16,29 @@ interface OrderItem {
 export default function OrdersPage() {
   const [orders, setOrders] = useState<OrderItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [userID, setUserID] = useState("");
 
   useEffect(() => {
-    const ordersRef = ref(realtimeDB, `orders/${userID}`);
+    const fetchOrdersForUser = async (userId: string) => {
+      try {
+        const userOrders = await fetchUserOrders(userId); // Fetch orders for the user
+        setOrders(userOrders);
+      } catch (error) {
+        console.error("Error fetching user orders:", error);
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUserID(user.uid);
-      }
-    });
-
-    const unsubscribe = onValue(ordersRef, (snapshot) => {
-      const ordersData = snapshot.val();
-
-      if (ordersData) {
-        const ordersArray = Object.keys(ordersData)
-          .map((key) => ({
-            orderId: key,
-            ...ordersData[key],
-          }))
-          .sort(
-            (a, b) =>
-              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-          ); // Sort by timestamp
-
-        setOrders(ordersArray);
+        fetchOrdersForUser(user.uid); // Fetch orders when the user is authenticated
       } else {
         setOrders([]);
+        setLoading(false);
       }
-
-      setLoading(false);
     });
-
-    return () => unsubscribe(); // Cleanup listener
-  }, [userID]);
+  }, []);
 
   if (loading) {
     return (
