@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Home, Users, BarChart, Settings, LogOut } from "lucide-react";
+import { Home, Users, BarChart, Settings } from "lucide-react";
 import Link from "next/link";
 
 const AdminSidebar = () => {

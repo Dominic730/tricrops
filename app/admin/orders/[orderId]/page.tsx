@@ -31,7 +31,7 @@ export default function OrderDetails() {
         }
       });
     }
-  }, []);
+  }, [orderId]);
 
   if (!order) {
     return <div>Loading...</div>;
