@@ -26,14 +26,14 @@ export default function Login() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gradient-to-r from-green-400 to-blue-500">
+      <div className="flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500" style={{ height: "calc(100vh - 96px)" }}>
         <Loader className="animate-spin h-16 w-16 text-white" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-green-300 to-blue-600 flex items-center justify-center p-5">
+    <div className="bg-gradient-to-r from-green-300 to-blue-600 flex items-center justify-center p-5" style={{ height: "calc(100vh - 96px)" }}>
       <div className="w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-hidden">
         <div className="md:flex">
           <div className="hidden md:block w-1/2 bg-green-500 p-10 text-white">
@@ -56,12 +56,7 @@ export default function Login() {
                 Privacy Policy
               </Link>
             </p>
-            <Button
-              className="w-full py-3 bg-green-500 hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-3 rounded-lg text-white font-semibold text-lg"
-              onClick={async () => {
-                await signInWithGoogle()
-              }}
-            >
+            <Button className="w-full py-3 bg-green-500 hover:bg-green-600 transition-colors duration-300 flex items-center justify-center space-x-3 rounded-lg text-white font-semibold text-lg" onClick={async () => { await signInWithGoogle() }} >
               {loading ? (
                 <Loader className="animate-spin" />
               ) : (
@@ -70,10 +65,7 @@ export default function Login() {
               <span>Sign in with Google</span>
             </Button>
             <div className="mt-8 text-center">
-              <Link
-                className="text-sm text-green-600 hover:text-green-700 font-medium"
-                href="/signup"
-              >
+              <Link className="text-sm text-green-600 hover:text-green-700 font-medium" href="/signup">
                 New to TripCrops? Create an account
               </Link>
             </div>

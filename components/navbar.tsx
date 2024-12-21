@@ -16,7 +16,7 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="shadow-lg bg-[#f8f9fa]">
+    <nav className="shadow-lg bg-[#f8f9fa] border-b-2">
       <div className="container mx-auto px-6 py-4 text-lg z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-5">

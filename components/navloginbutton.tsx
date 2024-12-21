@@ -33,7 +33,7 @@ export default function NavLoginButton() {
         }
       });
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);

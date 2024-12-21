@@ -2,12 +2,11 @@
 
 import Image from "next/image";
 import { Loader } from "lucide-react";
-import { useRouter } from "next/router";
-import { useParams } from "next/navigation";
 import { auth } from "@/lib/firebase/firebase";
 import editProducts from "@/actions/editProducts";
 import fetchProduct from "@/actions/fetchProduct";
 import { UploadButton } from "@/utils/uploadthing";
+import { useRouter, useParams } from "next/navigation";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 
@@ -25,7 +24,7 @@ export default function Page() {
   const [productName, setProductName] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [productPrice, setProductPrice] = useState("");
-  const { productId } = useParams<{ productId: string }>()
+  const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<Product | null>(null);
 
   const fetchData = useCallback(async () => {
@@ -60,7 +59,7 @@ export default function Page() {
 
   if (loading) {
     return (
-      <div className="spinner h-screen flex justify-center items-center">
+      <div className="spinner flex justify-center items-center" style={{ height: "calc(100vh - 96px)" }}>
         <Loader size={32} className="animate-spin" />
       </div>
     );
@@ -71,7 +70,7 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center pt-32">
+    <div className="bg-gray-100 flex items-center justify-center" style={{ height: "calc(100vh - 96px)" }}>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">Edit Product</h1>
         <form

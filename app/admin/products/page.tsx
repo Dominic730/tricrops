@@ -1,9 +1,9 @@
 "use client";
 
+import { Loader } from "lucide-react";
 import ProductCard from "@/components/productcard";
 import { useEffect, useState, useCallback } from "react";
 import fetchAllProducts from "@/actions/fetchAllProducts";
-import { Loader } from "lucide-react";
 
 interface Product {
   id: string;
@@ -13,8 +13,8 @@ interface Product {
 }
 
 export default function AdminProducts() {
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
 
   const FetchData = useCallback(async () => {
     setLoading(true);
@@ -27,13 +27,14 @@ export default function AdminProducts() {
     FetchData();
   }, [FetchData]);
 
-  if (loading)
+  if (loading) {
     return (
       <div className="spinner flex justify-center items-center" style={{ height: "calc(100vh - 96px)" }}>
         <Loader size={32} className="animate-spin" />
       </div>
     );
-
+  }
+    
   return (
     <div className="container mx-auto px-1 py-5" style={{ height: "calc(100vh - 96px)" }}>
       <div className="flex flex-wrap justify-center gap-5">
