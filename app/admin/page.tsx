@@ -12,7 +12,7 @@ import AdminSidebar from "@/components/adminsidebar";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { useCallback, useEffect, useState } from "react";
 import fetchAllProducts from "@/actions/fetchAllProducts";
-import { Card, CardFooter, CardHeader, CardContent, } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardContent } from "@/components/ui/card";
 
 interface Product {
   id: string;
@@ -26,38 +26,67 @@ export default function Admin() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const FetchData = useCallback(async () => {
     setLoading(true);
-    const data = await fetchAllProducts();
-    setProducts(data ?? []);
+    try {
+      const data = await fetchAllProducts();
+      setProducts(data ?? []);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    console.log(products);
-    const authenticatedEmails = [
-      "adithyakb93@gmail.com",
-      "abrahul02@gmail.com",
-    ];
-    FetchData();
-    onAuthStateChanged(auth, (user: null | User) => {
-      if (user && user.email && authenticatedEmails.includes(user?.email)) {
-        setUser(user);
+    const authenticatedEmails = ["adithyakb93@gmail.com", "abrahul02@gmail.com"];
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser && currentUser.email && authenticatedEmails.includes(currentUser.email)) {
+        setUser(currentUser);
+        FetchData();
       } else {
         router.push("/");
       }
       setLoading(false);
     });
-  }, [router, FetchData, products]);
+    return () => unsubscribe();
+  }, [router, FetchData]);
 
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!productName || !productPrice || !imageUrl) {
+      alert("All fields are required.");
+      return;
+    }
+    if (Number(productPrice) <= 0) {
+      alert("Price must be greater than 0.");
+      return;
+    }
+    try {
+      await addProducts({
+        productname: productName,
+        productprice: Number(productPrice),
+        productimage: imageUrl,
+      });
+      alert("Product added successfully!");
+      setProductName("");
+      setProductPrice("");
+      setImageUrl("");
+      FetchData();
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Failed to add product.");
+    }
+  };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="animate-spin h-16 w-16 text-green-500" />{" "}
+      <div className="flex items-center justify-center" style={{ height: "calc(100vh - 96px)" }}>
+        <Loader className="animate-spin h-16 w-16 text-green-500" />
       </div>
     );
   }
@@ -71,25 +100,14 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex">
-      <AdminSidebar />
-      <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center pt-20 px-10 md:px-0 flex-1">
+    <div className="flex" style={{ height: "calc(100vh - 96px)" }}>
+      <div className="bg-gray-100 flex items-center justify-center w-full">
         <Card className="w-full max-w-md shadow-lg">
           <CardHeader className="text-xl font-bold text-center bg-gray-800 text-white p-4">
             Upload Product
           </CardHeader>
           <CardContent>
-            <form
-              onSubmit={async (e) => {
-                e.preventDefault();
-                await addProducts({
-                  productname: productName,
-                  productprice: Number(productPrice),
-                  productimage: imageUrl,
-                });
-              }}
-              className="space-y-6 py-5"
-            >
+            <form onSubmit={handleFormSubmit} className="space-y-6 py-5">
               <div>
                 <Label htmlFor="product-name" className="block mb-2 text-md font-medium text-gray-700"> Product Name </Label>
                 <Input id="product-name" type="text" value={productName} onChange={(e) => setProductName(e.target.value)} className="block w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter product name" required />
@@ -99,15 +117,14 @@ export default function Admin() {
                 <Input id="product-price" type="number" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} className="block w-full px-3 py-2 text-gray-900 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500" placeholder="Enter product price" required />
               </div>
               <div>
-                <Label htmlFor="product-price" className="block mb-2 text-md font-medium text-gray-700"> Product Image </Label>
-                <UploadButton endpoint="imageUploader" 
+                <Label htmlFor="product-image" className="block mb-2 text-md font-medium text-gray-700"> Product Image </Label>
+                <UploadButton
+                  endpoint="imageUploader"
                   onClientUploadComplete={(res) => {
-                    // Do something with the response
                     setImageUrl(`https://utfs.io/f/${res[0].key}`);
                     alert("Upload Completed");
                   }}
                   onUploadError={(error: Error) => {
-                    // Do something with the error.
                     alert(`ERROR! ${error.message}`);
                   }}
                 />
@@ -116,7 +133,7 @@ export default function Admin() {
             </form>
           </CardContent>
           <CardFooter className="text-center p-4 bg-gray-50">
-            <p className="text-sm text-gray-500"> Ensure the details are correct before submitting. </p>
+            <p className="text-sm text-gray-500">Ensure the details are correct before submitting.</p>
           </CardFooter>
         </Card>
       </div>

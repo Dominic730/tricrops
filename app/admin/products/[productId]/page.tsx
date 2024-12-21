@@ -19,14 +19,14 @@ interface Product {
 }
 
 export default function Page() {
-  const { productId } = useParams(); // No need for generic type here
   const router = useRouter();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [productName, setProductName] = useState("");
-  const [productPrice, setProductPrice] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [imageUrl, setImageUrl] = useState("");
+  const [productName, setProductName] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [productPrice, setProductPrice] = useState("");
+  const { productId } = useParams<{ productId: string }>()
+  const [product, setProduct] = useState<Product | null>(null);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -41,10 +41,7 @@ export default function Page() {
   }, [productId]);
 
   useEffect(() => {
-    const authenticatedEmails = [
-      "adithyakb93@gmail.com",
-      "abrahul02@gmail.com",
-    ];
+    const authenticatedEmails = [ "adithyakb93@gmail.com", "abrahul02@gmail.com" ];
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.email && authenticatedEmails.includes(user.email)) {
         setUser(user);

@@ -1,9 +1,9 @@
 "use client";
 
+import { Loader } from "lucide-react";
 import ProductCard from "@/components/productcard";
 import { useEffect, useState, useCallback } from "react";
 import fetchAllProducts from "@/actions/fetchAllProducts";
-import { Loader } from "lucide-react";
 
 interface Product {
   id: string;
@@ -26,27 +26,20 @@ export default function Home() {
   useEffect(() => {
     FetchData();
   }, [FetchData]);
+  
   if (loading)
     return (
       <div className="spinner h-screen flex justify-center items-center">
-        <Loader
-          size={32}
-          className="animate-spin"
-        />
+        <Loader size={32} className="animate-spin" />
       </div>
     );
+
   return (
-    <div className="container mx-auto px-4 pt-40 pb-5">
+    <div className="container mx-auto px-1 py-5">
       <div className="flex flex-wrap justify-center gap-5">
         {products.map((product) => (
           <div key={product.id}>
-            <ProductCard
-              link="/product/"
-              id={product.id}
-              productName={product.productname}
-              productPrice={product.productprice}
-              productImage={product.productimage}
-            />
+            <ProductCard link="/product/" id={product.id} productName={product.productname} productPrice={product.productprice} productImage={product.productimage} />
           </div>
         ))}
       </div>
