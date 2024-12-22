@@ -31,8 +31,8 @@ export function Navbar() {
 
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-4">
-              {pathname === "/" ? (
-                <Link href="/sell" className="text-black hover:text-opacity-80 transition duration-200">
+              {pathname !== "/" ? (
+                <Link href="/" className="text-black hover:text-opacity-80 transition duration-200">
                   <Button variant="ghost" className="flex items-center space-x-2">
                     <ShoppingBag className="h-5 w-5 text-black" />
                     <span>Become a Seller</span>
