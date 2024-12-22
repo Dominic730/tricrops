@@ -5,14 +5,12 @@ import Image from "next/image";
 import { useState } from "react";
 import SearchBar from "./searchbar";
 import NavLoginButton from "./navloginbutton";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ShoppingBag, Shovel, Menu } from "lucide-react";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import CompanyLogo from "@/public/Tripcrop.png";
+import { Button } from "@/components/ui/button";
+import { ShoppingBag, Menu } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function Navbar() {
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -31,21 +29,18 @@ export function Navbar() {
 
           <div className="flex items-center space-x-4">
             <div className="hidden md:flex items-center space-x-4">
-              {pathname !== "/" ? (
-                <Link href="/" className="text-black hover:text-opacity-80 transition duration-200">
-                  <Button variant="ghost" className="flex items-center space-x-2">
-                    <ShoppingBag className="h-5 w-5 text-black" />
-                    <span>Become a Seller</span>
-                  </Button>
-                </Link>
-              ) : (
-                <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200">
-                  <Button variant="ghost" className="flex items-center space-x-2">
-                    <Shovel className="h-5 w-5 text-black" />
-                    <span>Farming Essentials</span>
-                  </Button>
-                </Link>
-              )}
+              <Link href="/" className="text-black hover:text-opacity-80 transition duration-200">
+                <Button variant="ghost" className="flex items-center space-x-2">
+                  <ShoppingBag className="h-5 w-5 text-black" />
+                  <span>Become a Seller</span>
+                </Button>
+              </Link>
+              <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200">
+                <Button variant="ghost" className="flex items-center space-x-2">
+                  <ShoppingBag className="h-5 w-5 text-black" />
+                  <span>Become a Buyer</span>
+                </Button>
+              </Link>
               <NavLoginButton />
             </div>
 
