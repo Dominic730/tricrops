@@ -36,7 +36,7 @@ export default function Home() {
     
   return (
     <div className="container mx-auto px-1 py-5">
-      <h1 className="text-center p-2 text-xl font-bold">Products That You Can Buy</h1>
+      <h1 className="text-center p-2 text-xl font-bold">Buy</h1>
       <div className="flex flex-wrap justify-center gap-5">
         {products.map((product) => (
           <div key={product.id}>

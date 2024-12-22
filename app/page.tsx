@@ -29,14 +29,14 @@ export default function Home() {
   
   if (loading)
     return (
-      <div className="spinner h-screen flex justify-center items-center">
+      <div className="spinner flex justify-center items-center" style={{ height: "calc(100vh - 95px)" }}>
         <Loader size={32} className="animate-spin" />
       </div>
     );
 
   return (
     <div className="container mx-auto px-1 py-5">
-      <h1 className="text-center p-2 text-xl font-bold">Products That You Can Sell</h1>
+      <h1 className="text-center p-2 text-xl font-bold">Sell</h1>
       <div className="flex flex-wrap justify-center gap-5">
         {products.map((product) => (
           <div key={product.id}>
