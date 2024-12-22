@@ -7,32 +7,25 @@ import { useEffect, useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
 import { auth } from "@/lib/firebase/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
-import {
-  CircleUserRound,
-  Loader,
-  LogIn,
-  LogOut,
-  ShoppingCart,
-  BaggageClaim,
-  UserPen,
-  Truck,
-} from "lucide-react";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from "@/components/ui/navigation-menu";
+import { CircleUserRound, Loader, LogIn, LogOut, ShoppingCart, BaggageClaim, UserPen, Truck, UserRoundPlus } from "lucide-react";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger } from "@/components/ui/navigation-menu";
 
 export default function NavLoginButton() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [name, setName] = useState("");
+  const [admin, setAdmin] = useState(false);
 
   useEffect(() => {
+    const authenticatedEmails = [ "adithyakb93@gmail.com", "abrahul02@gmail.com" ];
+    onAuthStateChanged(auth, (user: null | User) => {
+      if (user && user.email && authenticatedEmails.includes(user?.email)) {
+        setAdmin(true);
+      } else {
+        router.push("/");
+      }
+    });
     if (user?.uid) {
       fetchName(user.uid).then((item) => {
         if (item) {
@@ -40,7 +33,7 @@ export default function NavLoginButton() {
         }
       });
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -71,7 +64,6 @@ export default function NavLoginButton() {
           <NavigationMenuItem>
             <NavigationMenuTrigger className="mb-0 bg-[#f8f9fa] flex gap-2 items-center px-3 py-2 rounded-md transition">
               {user ? <CircleUserRound /> : ""}
-
               <span className="text-sm font-medium">
                 {user ? <div>{name}</div> : "Login"}
               </span>
@@ -82,16 +74,9 @@ export default function NavLoginButton() {
                   <>
                     <li className="w-full">
                       <NavigationMenuLink asChild>
-                        <Link
-                          className="text-sm flex gap-2 items-center"
-                          href="/login"
-                        >
+                        <Link className="text-sm flex gap-2 items-center" href="/login">
                           <LogIn />
-                          <span>
-                            Login
-                            <br />
-                            Sign Up
-                          </span>
+                          <span> Login <br /> Sign Up </span>
                         </Link>
                       </NavigationMenuLink>
                     </li>
@@ -99,15 +84,9 @@ export default function NavLoginButton() {
                 ) : (
                   <>
                     {navigationItems.map((item) => (
-                      <li
-                        key={item.href}
-                        className="w-full"
-                      >
+                      <li key={item.href} className="w-full">
                         <NavigationMenuLink asChild>
-                          <Link
-                            className="text-sm flex gap-2 items-center"
-                            href={item.href}
-                          >
+                          <Link className="text-sm flex gap-2 items-center" href={item.href}>
                             {item.icon}
                             <span>{item.label}</span>
                           </Link>
@@ -115,12 +94,20 @@ export default function NavLoginButton() {
                         <div className="my-2 border-t border-gray-300" />
                       </li>
                     ))}
+                    {admin && (
+                      <li className="w-full">
+                        <NavigationMenuLink asChild>
+                          <Link className="text-sm flex gap-2 items-center" href="/admin">
+                            <UserRoundPlus />
+                            <span>Admin</span>
+                          </Link>
+                        </NavigationMenuLink>
+                        <div className="my-2 border-t border-gray-300" />
+                      </li>
+                    )}
                     <li className="w-full">
                       <NavigationMenuLink asChild>
-                        <button
-                          className="text-sm flex gap-2 items-center w-full text-left"
-                          onClick={handleLogOut}
-                        >
+                        <button className="text-sm flex gap-2 items-center w-full text-left" onClick={handleLogOut}>
                           <LogOut />
                           <span>Log Out</span>
                         </button>

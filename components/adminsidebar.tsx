@@ -1,77 +1,64 @@
 "use client";
 
-import { useState } from "react";
-import { Home, Users, BarChart, Settings, LogOut } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { signOut } from "@/lib/firebase/auth";
+import { BarChart, Home, LogOut, Menu, Settings, Users, X } from 'lucide-react';
+
+interface SidebarLinkProps {
+  href: string;
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  showText: boolean;
+}
+
+const SidebarLink = ({ href, icon: Icon, label, showText }: SidebarLinkProps) => (
+  <Link href={href} className={`flex justify-start items-center rounded-lg hover:bg-gray-400 ${showText ? "p-3 gap-3" : "p-3"}`}>
+    <Icon className={`w-5 h-5`} />
+    {showText && <span className="text-sm font-medium">{label}</span>}
+  </Link>
+);
 
 const AdminSidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+  const handleLogout = async () => {
+    await signOut();
+  }
 
   return (
-    <div className="relative md:w-64">
-      {/* Toggle Button */}
-      <button
-        onClick={toggleSidebar}
-        className="absolute top-6 left-4 md:hidden z-50 text-black text-xl p-2 mt-20"
-        aria-label="Toggle Sidebar"
-      >
-        ☰
-      </button>
-
+    <div className="bg-gray-100 mt-1 border-r border-black" style={{ height: "calc(100vh - 100px)" }}>
+      
       {/* Sidebar */}
-      <div
-        className={`fixed top-0 left-0 h-screen bg-gray-800 text-white flex-col w-64 transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 md:flex transition-transform duration-300 z-40`}
-      >
-        <div className="flex flex-col h-screen pt-40">
-          <div className="flex items-center px-10 h-20 border-b border-gray-700">
-            <h1 className="text-2xl font-semibold">Panel</h1>
+      <div className={`bg-gray-100 transition-transform transform ${isSidebarOpen ? "w-64" : "w-fit"} h-full flex flex-col`}>
+        
+        {/* Sidebar Header */}
+        <div className="p-2 mt-auto flex justify-start items-center h-20 border-b border-gray-700">
+          <button onClick={toggleSidebar} className={`flex justify-start items-center rounded-lg hover:bg-gray-400 ${isSidebarOpen ? "p-3 mr-3" : "p-3"}`}>
+            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+          {isSidebarOpen && <span className="text-xl font-semibold">Admin Panel</span>}
+        </div>
+
+        {/* Navigation Links */}
+        <div className="p-2 flex flex-col flex-grow">
+          <div>
+            <SidebarLink href="/admin" icon={Home} label="Dashboard" showText={isSidebarOpen} />
+            <SidebarLink href="#" icon={Users} label="Users" showText={isSidebarOpen} />
+            <SidebarLink href="/admin/products" icon={BarChart} label="Products" showText={isSidebarOpen} />
+            <SidebarLink href="#" icon={Settings} label="Settings" showText={isSidebarOpen} />
           </div>
-          <nav className="px-4 py-6 space-y-4">
-            <Link
-              href="#"
-              className="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700"
-            >
-              <Home className="w-5 h-5 mr-3" />
-              Dashboard
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700"
-            >
-              <Users className="w-5 h-5 mr-3" />
-              Users
-            </Link>
-            <Link
-              href="/admin/products"
-              className="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700"
-            >
-              <BarChart className="w-5 h-5 mr-3" />
-              Products
-            </Link>
-            <Link
-              href="#"
-              className="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700"
-            >
-              <Settings className="w-5 h-5 mr-3" />
-              Settings
-            </Link>
-          </nav>
+        </div>
+        
+        {/* Log Out button */}
+        <div className="p-2 mt-auto">
+          <button onClick={handleLogout} className={`flex justify-start items-center rounded-lg hover:bg-gray-400 ${isSidebarOpen ? "p-3 gap-3" : "p-3"}`}>
+            <LogOut className={`w-5 h-5`} />
+            {isSidebarOpen && <span className="text-sm font-medium">Log Out</span>}
+          </button>
         </div>
       </div>
-
-      {/* Overlay for mobile when sidebar is open */}
-      {isSidebarOpen && (
-        <div
-          onClick={toggleSidebar}
-          className="fixed inset-0 bg-black opacity-50 md:hidden"
-        ></div>
-      )}
     </div>
   );
 };

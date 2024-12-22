@@ -26,7 +26,7 @@ export default function Product() {
   const [totalCost, setTotalCost] = useState(0)
   const [user, setUser] = useState<User | null>(null)
   const [product, setProduct] = useState<Product | null>(null)
-  const [buyOrSell, setBuyOrSell] = useState<"buy" | "sell">("buy")
+  const [buyOrSell, setBuyOrSell] = useState<"buy" | "sell">("sell")
   const router = useRouter()
   const { productId } = useParams<{ productId: string }>()
 
@@ -97,7 +97,7 @@ export default function Product() {
                   <SelectValue placeholder="Select an action" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="buy">Buy</SelectItem>
+                  {/* <SelectItem value="buy">Buy</SelectItem> */}
                   <SelectItem value="sell">Sell</SelectItem>
                 </SelectContent>
               </Select>
