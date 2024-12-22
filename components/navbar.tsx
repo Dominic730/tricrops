@@ -57,7 +57,7 @@ export function Navbar() {
               <SheetContent side="right" className="w-72 sm:w-80 bg-gradient-to-r from-indigo-600 to-purple-600 p-6">
                 <nav className="flex flex-col space-y-6">
                   <Link href="/seller" className="text-black hover:text-opacity-80 transition duration-200"> Become a Seller </Link>
-                  <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200"> Farming Essentials </Link>
+                  <Link href="/buy" className="text-black hover:text-opacity-80 transition duration-200"> Become a Buyer </Link>
                   <NavLoginButton />
                 </nav>
               </SheetContent>
