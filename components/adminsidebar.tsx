@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
-import { BarChart, Home, LogOut, Menu, Settings, Users, X } from 'lucide-react';
+import { BarChart, Home, LogOut, Menu, Quote, Settings, Users, X } from 'lucide-react';
 
 interface SidebarLinkProps {
   href: string;
@@ -47,6 +47,7 @@ const AdminSidebar = () => {
             <SidebarLink href="/admin" icon={Home} label="Dashboard" showText={isSidebarOpen} />
             <SidebarLink href="#" icon={Users} label="Users" showText={isSidebarOpen} />
             <SidebarLink href="/admin/products" icon={BarChart} label="Products" showText={isSidebarOpen} />
+            <SidebarLink href="/admin/quote" icon={Quote} label="Quotes" showText={isSidebarOpen} />
             <SidebarLink href="#" icon={Settings} label="Settings" showText={isSidebarOpen} />
           </div>
         </div>
