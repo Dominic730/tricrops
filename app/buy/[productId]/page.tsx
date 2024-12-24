@@ -33,7 +33,7 @@ export default function Product() {
   }
 
   return (
-    <div className="container mx-auto px-4 pt-28">
+    <div className="container mx-auto p-4">
       <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
         <div className="md:flex">
           <div className="md:flex-shrink-0">

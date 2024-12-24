@@ -1,7 +1,7 @@
 "use server";
 
-import { realtimeDB } from "@/lib/firebase/firebase";
 import { ref, onValue } from "firebase/database";
+import { realtimeDB } from "@/lib/firebase/firebase";
 
 interface CartItem {
     image: string;

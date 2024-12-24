@@ -6,13 +6,11 @@ import { useParams, useRouter } from "next/navigation"
 import { onAuthStateChanged, User } from "firebase/auth"
 import { AlertCircle, Minus, Plus, ShoppingCart } from "lucide-react"
 
-import addCart from "@/actions/addCart"
 import addSack from "@/actions/addSack"
 import { auth } from "@/lib/firebase/firebase"
 import { Button } from "@/components/ui/button"
 import fetchProduct from "@/actions/fetchProduct"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 interface Product {
   id: string
@@ -26,7 +24,6 @@ export default function Product() {
   const [totalCost, setTotalCost] = useState(0)
   const [user, setUser] = useState<User | null>(null)
   const [product, setProduct] = useState<Product | null>(null)
-  const [buyOrSell, setBuyOrSell] = useState<"buy" | "sell">("sell")
   const router = useRouter()
   const { productId } = useParams<{ productId: string }>()
 
@@ -60,17 +57,12 @@ export default function Product() {
     const userId = user.uid
 
     try {
-      if (buyOrSell === "buy") {
-        await addCart({ productName: productname, image: productimage, price: productprice, weight, userId })
-        alert("Product added to cart for buying.")
-      } else {
-        await addSack({ productName: productname, image: productimage, price: productprice, weight, userId })
-        alert("Product added to cart for selling.")
-      }
+      await addSack({ productName: productname, image: productimage, price: productprice, weight, userId })
+      alert("Product added to cart for selling.")
       handleWeightChange(0)
     } catch (e) {
       console.error(e)
-      alert(`Failed to ${buyOrSell} product.`)
+      alert(`Failed to add product.`)
     }
   }
 
@@ -89,18 +81,6 @@ export default function Product() {
             </p>
             <div className="mt-6">
               <p className="text-3xl font-bold text-gray-900">₹ {product.productprice}/Kg</p>
-            </div>
-            <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700">Action:</label>
-              <Select value={buyOrSell} onValueChange={(value: "buy" | "sell") => setBuyOrSell(value)}>
-                <SelectTrigger className="w-full mt-1">
-                  <SelectValue placeholder="Select an action" />
-                </SelectTrigger>
-                <SelectContent>
-                  {/* <SelectItem value="buy">Buy</SelectItem> */}
-                  <SelectItem value="sell">Sell</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
             <div className="mt-6 flex items-center flex-col sm:flex-row gap-2">
               <div className="flex-1">
@@ -127,16 +107,8 @@ export default function Product() {
               </div>
             </div>
             <div className="mt-8">
-              <Button
-                className={`w-full ${
-                  buyOrSell === "buy"
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-blue-500 hover:bg-blue-600"
-                }`}
-                disabled={weight === 0}
-                onClick={handleAction}
-              >
-                <ShoppingCart className="mr-2" /> {buyOrSell === "buy" ? "Add To Cart" : "Add To Sack"}
+              <Button className="w-full bg-blue-500 hover:bg-blue-600" disabled={weight === 0} onClick={handleAction} >
+                <ShoppingCart className="mr-2" /> Sell
               </Button>
             </div>
             <div className="mt-8">
