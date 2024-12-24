@@ -1,10 +1,17 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import fetchQuote from '@/actions/fetchQuote';
-import Image from 'next/image';
+import Image from "next/image";
+import fetchQuote from "@/actions/fetchQuote";
+import { Alert } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import updateQuote from "@/actions/updateQuote";
+import React, { useState, useEffect } from "react";
+import { Loader, CheckCircle } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 
-interface Quote {
+interface QuoteData {
+    quoteId: string;
     productId: string;
     productName: string;
     productImage: string;
@@ -15,91 +22,109 @@ interface Quote {
     status: string;
 }
 
-interface QuoteData {
-    [quoteId: string]: Quote;
-}
-
 export default function AdminQuote() {
     const [loading, setLoading] = useState(false);
-    const [quotes, setQuotes] = useState<QuoteData>({});
+    const [quotes, setQuotes] = useState<QuoteData[]>([]);
+    const [error, setError] = useState<string | null>(null);
+    const [alerts, setAlerts] = useState<Record<string, { message: string; type: "success" | "error" } | null>>({});
 
     useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const data = await fetchQuote();
-                setQuotes(data);
-            } catch (error) {
-                console.error("Error fetching quotes:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchData();
     }, []);
 
-    const updateStatus = async (quoteId: string, newStatus: string) => {
-        try {
-            // Placeholder for backend update logic
-            // e.g., await updateQuoteStatus(quoteId, newStatus);
-            setQuotes(prev => ({
-                ...prev,
-                [quoteId]: {
-                    ...prev[quoteId],
-                    status: newStatus,
-                },
-            }));
-        } catch (error) {
-            console.error("Error updating status:", error);
-        }
-    };
-
     const getStatusColor = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'done':
-                return 'bg-green-500';
-            case 'pending':
-                return 'bg-red-500';
-            default:
-                return 'bg-gray-500';
+        if (status.toLowerCase() === "done") {
+            return "bg-green-500 px-3 py-2 text-white text-sm";
+        } else if (status.toLowerCase() === "pending") {
+            return "bg-red-500 px-3 py-2 text-white text-sm";
+        } else {
+            return "bg-gray-500 px-3 py-2 text-white text-sm";
         }
     };
 
-    if (loading) return <div>Loading...</div>;
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const data = await fetchQuote();
+            setQuotes(data);
+            setAlerts(data.reduce((acc, quote) => ({ ...acc, [quote.quoteId]: null }), {}));
+        } catch (error) {
+            console.error("Error fetching quotes:", error);
+            setError("Failed to fetch quotes.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const updateStatus = async (quoteId: string, status: string) => {
+        const response = await updateQuote(quoteId, status);
+
+        setAlerts((prev) => ({
+            ...prev,
+            [quoteId]: {
+                message: response,
+                type: response === "Quote updated successfully." ? "success" : "error",
+            },
+        }));
+        fetchData();
+    };
+
+    if (loading) {
+        return (
+            <div className="spinner flex justify-center items-center" style={{ height: "calc(100vh - 96px)" }}>
+                <Loader size={32} className="animate-spin" />
+            </div>
+        );
+    }
 
     return (
-        <div className="p-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {Object.entries(quotes).map(([quoteId, quote]) => (
-                <div
-                    key={quoteId}
-                    className={`p-4 rounded shadow ${getStatusColor(quote.status)}`}
-                >
-                    <div className="text-white">
-                        <h3 className="text-lg font-bold">{quote.productName}</h3>
-                        <Image src={quote.productImage} alt={quote.productName} className="w-full h-32 object-cover rounded my-2" />
-                        <p><strong>Requested by:</strong> {quote.name}</p>
-                        <p><strong>Email:</strong> {quote.email}</p>
-                        <p><strong>Message:</strong> {quote.message}</p>
-                        <p><strong>Created At:</strong> {new Date(quote.createdAt).toLocaleString()}</p>
-                        <p><strong>Status:</strong> {quote.status}</p>
-                    </div>
-                    <div className="mt-2">
-                        <button
-                            className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                            onClick={() => updateStatus(quoteId, 'done')}
-                        >
-                            Mark as Done
-                        </button>
-                        <button
-                            className="bg-yellow-500 text-white px-4 py-2 rounded"
-                            onClick={() => updateStatus(quoteId, 'pending')}
-                        >
-                            Mark as Pending
-                        </button>
-                    </div>
-                </div>
-            ))}
+        <div className="p-10" style={{ height: "calc(100vh - 96px)" }}>
+            <h1 className="text-3xl font-extrabold text-center mb-8 text-gray-800">
+                All Quotes
+            </h1>
+            {error && <Alert variant="destructive">{error}</Alert>}
+            <div className="p-4 grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {quotes.map((quote) => (
+                    <Card key={quote.quoteId}>
+                        <CardHeader>
+                            <CardTitle className="flex justify-between items-center">
+                                <div className="text-xl font-bold">
+                                    {quote.productName}
+                                </div>
+                                <Badge variant="outline" className={getStatusColor(quote.status)}>
+                                    {quote.status.toUpperCase()}
+                                </Badge>
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <div className="flex justify-center items-center">
+                                <Image src={quote.productImage} alt={quote.productName} className="w-[150px] h-[150px] object-cover rounded my-2" width={150} height={150} />
+                            </div>
+                            <dl className="grid grid-cols-2 gap-1 text-sm">
+                                <dt className="font-semibold">Requested by:</dt>{" "}
+                                <dd>{quote.name}</dd>
+                                <dt className="font-semibold">Email:</dt> <dd>{quote.email}</dd>
+                                <dt className="font-semibold">Message:</dt> <dd>{quote.message}</dd>
+                                <dt className="font-semibold">Created At:</dt>{" "}
+                                <dd>{new Date(quote.createdAt).toLocaleString()}</dd>
+                            </dl>
+                            {alerts[quote.quoteId] && (
+                                <Alert variant={alerts[quote.quoteId]?.type === "success" ? "default" : alerts[quote.quoteId]?.type === "error" ? "destructive" : undefined} className="mt-2">
+                                    {alerts[quote.quoteId]?.message}
+                                </Alert>
+                            )}
+                        </CardContent>
+                        <CardFooter className="flex justify-between">
+                            <Button variant="outline" onClick={() => updateStatus(quote.quoteId, "done")}>
+                                <CheckCircle /> Mark as Done
+                            </Button>
+                            {/* <Button variant="outline" onClick={() => updateStatus(quote.quoteId, "pending")}>
+                                <RotateCw /> Mark as Pending
+                            </Button> */}
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
         </div>
     );
 }

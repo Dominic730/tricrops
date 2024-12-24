@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { signOut } from "@/lib/firebase/auth";
-import { BarChart, Home, LogOut, Menu, Quote, Settings, Users, X } from 'lucide-react';
+import { BarChart, Home, LogOut, Logs, Menu, Quote, Settings, Users, X } from 'lucide-react';
 
 interface SidebarLinkProps {
   href: string;
@@ -13,9 +13,14 @@ interface SidebarLinkProps {
 }
 
 const SidebarLink = ({ href, icon: Icon, label, showText }: SidebarLinkProps) => (
-  <Link href={href} className={`flex justify-start items-center rounded-lg hover:bg-gray-400 ${showText ? "p-3 gap-3" : "p-3"}`}>
-    <Icon className={`w-5 h-5`} />
+  <Link href={href} className={`flex justify-start items-center rounded-lg hover:bg-gray-400 ${showText ? "p-3 gap-3" : "p-3 relative group"}`}>
+    <Icon className="w-5 h-5" />
     {showText && <span className="text-sm font-medium">{label}</span>}
+    {!showText && (
+      <span className="absolute left-full w-max bg-gray-700 text-white text-sm font-medium p-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity">
+        {label}
+      </span>
+    )}
   </Link>
 );
 
@@ -43,11 +48,12 @@ const AdminSidebar = () => {
 
         {/* Navigation Links */}
         <div className="p-2 flex flex-col flex-grow">
-          <div>
+          <div className="flex flex-col gap-2">
             <SidebarLink href="/admin" icon={Home} label="Dashboard" showText={isSidebarOpen} />
             <SidebarLink href="#" icon={Users} label="Users" showText={isSidebarOpen} />
             <SidebarLink href="/admin/products" icon={BarChart} label="Products" showText={isSidebarOpen} />
             <SidebarLink href="/admin/quote" icon={Quote} label="Quotes" showText={isSidebarOpen} />
+            <SidebarLink href="/admin/orders" icon={Logs} label="Orders" showText={isSidebarOpen} />
             <SidebarLink href="#" icon={Settings} label="Settings" showText={isSidebarOpen} />
           </div>
         </div>

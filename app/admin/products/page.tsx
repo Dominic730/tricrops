@@ -36,7 +36,10 @@ export default function AdminProducts() {
   }
     
   return (
-    <div className="container mx-auto px-1 py-5" style={{ height: "calc(100vh - 96px)" }}>
+    <div className="p-10" style={{ height: "calc(100vh - 96px)" }}>
+      <h1 className="text-3xl font-extrabold text-center mb-8 text-gray-800">
+        All Products
+      </h1>
       <div className="flex flex-wrap justify-center gap-5">
         {products.map((product) => (
           <div key={product.id}>
