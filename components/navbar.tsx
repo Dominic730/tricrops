@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import SearchBar from "./searchbar";
 import NavLoginButton from "./navloginbutton";
-import CompanyLogo from "@/public/Tripcrop.png";
+import CompanyLogo from "@/public/Tripcrops.svg";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
