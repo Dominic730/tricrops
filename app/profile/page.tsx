@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { auth } from "@/lib/firebase/firebase";
 import { Button } from "@/components/ui/button";
 import fetchProfile from "@/actions/fetchProfile";
-import { addProfile } from "@/actions/addProfile";
 import { onAuthStateChanged } from "firebase/auth";
 import { updateProfile } from "@/actions/updateProfile";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -78,7 +77,7 @@ export default function Page() {
     };
 
     return (
-        <div className="pt-28">
+        <div className="">
             <Card className="container mx-auto px-4 py-8 max-w-2xl">
                 <CardHeader>
                     <CardTitle className="text-3xl font-bold text-center">
