@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import SearchBar from "./searchbar";
 import NavLoginButton from "./navloginbutton";
-import CompanyLogo from "@/public/Tripcrop.png";
+import CompanyLogo from "@/public/Logo.svg";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag, Menu } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -18,9 +18,9 @@ export function Navbar() {
       <div className="container mx-auto px-6 py-4 text-lg z-50">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-5">
-            <Link href="/" className="flex flex-col items-center justify-center">
-              <Image src={CompanyLogo} alt="Tricrops Logo" width={60} height={60} priority={true} style={{ width: "auto", height: "auto" }} />
-              <span className="text-sm font-semibold text-black">Tricrops</span>
+            <Link href="/" className="flex items-center justify-center gap-2">
+              <Image src={CompanyLogo} alt="Tricrops Logo" width={56} height={56} priority={true} />
+              <span className="text-2xl font-bold text-black">Tricrops</span>
             </Link>
           </div>
           <div className="hidden lg:block flex-1 px-40">
