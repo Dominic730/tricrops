@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
 
   useEffect(() => {
-    const authenticatedEmails = ["adithyakb93@gmail.com", "abrahul02@gmail.com"];
+    const authenticatedEmails = ["adithyakb93@gmail.com", "abrahul02@gmail.com", "tripcrops@gmail.com"];
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser && currentUser.email && authenticatedEmails.includes(currentUser.email)) {
         setUser(currentUser);
