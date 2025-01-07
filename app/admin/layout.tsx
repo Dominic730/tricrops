@@ -19,7 +19,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   useEffect(() => {
     const authenticatedEmails = ["adithyakb93@gmail.com", "abrahul02@gmail.com", "tripcrops@gmail.com"];
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser && currentUser.email && authenticatedEmails.includes(currentUser.email)) {
+      if (
+        currentUser &&
+        currentUser.email &&
+        authenticatedEmails.includes(currentUser.email)
+      ) {
         setUser(currentUser);
       } else {
         router.push("/");
@@ -31,7 +35,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center bg-gray-100" style={{ height: "calc(100vh - 100px)" }}>
+      <div
+        className="flex justify-center items-center bg-gray-100"
+        style={{ height: "calc(100vh - 100px)" }}
+      >
         <Loader className="animate-spin h-16 w-16 text-green-500" />
       </div>
     );
@@ -39,7 +46,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   if (!user) {
     return (
-      <div className="flex justify-center items-center" style={{ height: "calc(100vh - 100px)" }}>
+      <div
+        className="flex justify-center items-center"
+        style={{ height: "calc(100vh - 100px)" }}
+      >
         Not Authenticated
       </div>
     );
