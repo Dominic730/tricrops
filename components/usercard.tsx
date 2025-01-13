@@ -5,15 +5,10 @@ interface UserCardProps {
   id: string;
   displayName: string;
   email: string;
-  createdAt: any;
+  createdAt: string;
 }
 
-const UserCard: React.FC<UserCardProps> = ({
-  id,
-  displayName,
-  email,
-  createdAt,
-}) => {
+export default function UserCard ({ id, displayName, email, createdAt }: UserCardProps) {
   return (
     <Card className="mb-6 w-full max-w-sm rounded-lg shadow-md bg-white hover:shadow-lg transform transition-transform duration-200 border border-gray-200">
       <CardHeader className="border-b border-gray-300 pb-4">
@@ -32,15 +27,9 @@ const UserCard: React.FC<UserCardProps> = ({
         </p>
         <p className="text-sm">
           <strong className="text-gray-500">Created At:</strong>{" "}
-          <span className="text-gray-700">
-            {createdAt
-              ? new Date(createdAt.seconds * 1000).toLocaleString()
-              : "N/A"}
-          </span>
+          <span className="text-gray-700">{createdAt || "N/A"}</span>
         </p>
       </CardContent>
     </Card>
   );
 };
-
-export default UserCard;

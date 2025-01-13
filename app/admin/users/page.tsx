@@ -1,13 +1,14 @@
 "use client";
+
 import { useEffect, useState } from "react";
-import { fetchAllUsers } from "@/actions/fetchAllUsers"; // Adjust the path as needed
 import UserCard from "@/components/usercard";
+import { fetchAllUsers } from "@/actions/fetchAllUsers";
 
 interface User {
   id: string;
   displayName: string;
   email: string;
-  createdAt: any;
+  createdAt: string;
 }
 
 const UsersPage = () => {
@@ -37,13 +38,7 @@ const UsersPage = () => {
       ) : users.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {users.map((user) => (
-            <UserCard
-              key={user.id}
-              id={user.id}
-              displayName={user.displayName}
-              email={user.email}
-              createdAt={user.createdAt}
-            />
+            <UserCard key={user.id} id={user.id} displayName={user.displayName} email={user.email} createdAt={user.createdAt} />
           ))}
         </div>
       ) : (
