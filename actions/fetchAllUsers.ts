@@ -5,7 +5,7 @@ interface User {
   id: string;
   displayName: string;
   email: string;
-  createdAt: any;
+  createdAt: string;
 }
 
 export const fetchAllUsers = async (): Promise<User[]> => {
@@ -19,7 +19,7 @@ export const fetchAllUsers = async (): Promise<User[]> => {
         id: doc.id,
         displayName: data.displayName || "N/A",
         email: data.email || "N/A",
-        createdAt: data.createdAt || null,
+        createdAt: data.createdAt ? data.createdAt.toDate().toISOString() : "N/A",
       };
     });
 

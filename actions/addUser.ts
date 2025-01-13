@@ -1,6 +1,6 @@
-import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { User as UserType } from "firebase/auth"; // Import User type from Firebase
 import { db } from "../lib/firebase/firebase";
+import { User as UserType } from "firebase/auth"; // Import User type from Firebase
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export const createUserDoc = async (user: UserType) => {
   const docRef = doc(db, "users", user.uid);
